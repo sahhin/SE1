@@ -57,6 +57,17 @@ public class CustomerRepository {
   }
 
 
+  /** Delete a customer from the database.
+   * @param customerId Customer identifier. */
+  public static void deleteCustomerById(int customerId) {
+    var session = H2Database.getInstance().getSession();
+    var customer = session.get(Customer.class, customerId);
+    var transaction = session.beginTransaction();
+    session.delete(customer);
+    transaction.commit();
+  }
+
+
   /** Print a table of all customers to the console. This
    * method is not really a repository function, it's more
    * intended to be a helper during debugging and development. */

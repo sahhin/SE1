@@ -6,6 +6,9 @@ import java.util.List;
 /** Database connector configuration. */
 public class DatabaseConfig {
 
+  // Non-persistent mode. Use for unit tests!
+  public boolean initInMemory = false;
+
   // Connection and H2 settings.
   public String host = "localhost";
   public String dbName = "./test";

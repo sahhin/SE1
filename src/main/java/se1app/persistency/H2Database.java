@@ -1,5 +1,6 @@
 package se1app.persistency;
 
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
 import static java.util.Map.entry;
@@ -30,12 +31,19 @@ public class H2Database {
     if (_config == null) {
       configure(new DatabaseConfig()); // Initialize with default configuration.
     }
+    String conString = "";
     try {
-      _dbTcpServer = Server.createTcpServer("-ifNotExists").start();
-      System.out.println("[H2Database] "+_dbTcpServer.getStatus());
-      if (_config.startWebserver) {
-        _dbWebServer = Server.createWebServer().start();
-        System.out.println("[H2Database] "+_dbWebServer.getStatus());
+      if (_config.initInMemory) {
+        conString = "jdbc:h2:mem:"+_config.dbName;
+      }
+      else {
+        _dbTcpServer = Server.createTcpServer("-ifNotExists").start();
+        System.out.println("[H2Database] "+_dbTcpServer.getStatus());
+        if (_config.startWebserver) {
+          _dbWebServer = Server.createWebServer().start();
+          System.out.println("[H2Database] "+_dbWebServer.getStatus());
+        }
+        conString = "jdbc:h2:tcp://"+_config.host+":"+_dbTcpServer.getPort()+"/"+_config.dbName;
       }
     }
     catch (SQLException ex) {
@@ -52,7 +60,7 @@ public class H2Database {
     regBuilder.applySettings(Map.ofEntries(
       entry(Environment.DRIVER, "org.h2.Driver"),
       entry(Environment.DIALECT, "org.hibernate.dialect.H2Dialect"),
-      entry(Environment.URL, "jdbc:h2:tcp://"+_config.host+":"+_dbTcpServer.getPort()+"/"+_config.dbName),
+      entry(Environment.URL, conString),
       entry(Environment.USER, _config.user),
       entry(Environment.PASS, _config.password),
       entry(Environment.HBM2DDL_AUTO, "update"),
@@ -62,8 +70,10 @@ public class H2Database {
     // Create registry and metadata sources.
     var registry = regBuilder.build();
     var sources = new MetadataSources(registry);
-    for (Class<?> annotatedClass : _config.annotatedClasses) {
-      sources.addAnnotatedClass(annotatedClass);
+    if (_config.annotatedClasses != null) {
+      for (Class<?> annotatedClass : _config.annotatedClasses) {
+        sources.addAnnotatedClass(annotatedClass);
+      }
     }
 
     // Create Metadata and session factory.
@@ -106,8 +116,22 @@ public class H2Database {
       try { _session.close(); }
       catch (HibernateException ex) { /* */ }
     }
-    if (_dbTcpServer != null) _dbTcpServer.stop();
-    if (_dbWebServer != null) _dbWebServer.stop();
-    System.out.println("[H2Database] Connection closed and server threads stopped!");
+    if (_config.initInMemory) {
+      try {
+        var conn = DriverManager.getConnection("jdbc:h2:mem:"+_config.dbName, _config.user, _config.password);
+        var stmt = conn.createStatement();
+        stmt.execute("DROP ALL OBJECTS");
+        conn.close();
+      }
+      catch (SQLException ex) {
+        System.err.println("Failed to tear down in-memory database: "+ex);
+      }
+    }
+    else {
+      if (_dbTcpServer != null) _dbTcpServer.stop();
+      if (_dbWebServer != null) _dbWebServer.stop();
+      System.out.println("[H2Database] Connection closed and server threads stopped!");
+    }
+    _isInitialized = false;
   }
 }
