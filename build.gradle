@@ -17,13 +17,15 @@ application {
 
 
 dependencies {
-  implementation 'com.h2database:h2:1.4.200'                        // H2 database for persistency: https://h2database.com/
-  implementation 'org.hibernate:hibernate-core:5.4.13.Final'        // Hibernate ORM (Object-Relational Mapping) library.
-  implementation 'io.javalin:javalin:3.7.0'                         // REST-framework for web server: https://javalin.io
-  implementation 'org.slf4j:slf4j-simple:1.7.30'                    // Logging framework needed by Javalin
-  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'    //| JUnit 5 uses multiple packages, we need its API and
-  testImplementation 'org.junit.jupiter:junit-jupiter-params:5.6.1' //| the extension for parameterized tests (during build)
-  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.1'    //| as well as the runtime for execution.
+  implementation 'com.h2database:h2:1.4.200'                          // H2 database for persistency: https://h2database.com/
+  implementation 'org.hibernate:hibernate-core:5.4.13.Final'          // Hibernate ORM (Object-Relational Mapping) library.
+  implementation 'io.javalin:javalin:3.7.0'                           // REST-framework for web server: https://javalin.io
+  implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1' // Java JSON serialization library.
+  implementation 'org.slf4j:slf4j-simple:1.7.30'                      // Logging framework needed by Javalin
+  testImplementation 'io.rest-assured:rest-assured:4.3.0'             // Testing framework for REST APIs
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'      //| JUnit 5 uses multiple packages, we need its API and
+  testImplementation 'org.junit.jupiter:junit-jupiter-params:5.6.1'   //| the extension for parameterized tests (during build)
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.1'      //| as well as the runtime for execution.
 }
 
 
