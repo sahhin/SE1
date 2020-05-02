@@ -47,13 +47,6 @@ public class Customer {
   Customer() {}
 
 
-  /** Add an order for this customer.
-  * @param items List of items to order. */
-  public void orderItems(List<String> items) {
-    _orders.add(new Order(this, items));
-  }
-
-
   /** Output the properties of the customer.
    * @return The customer's attributes concatenated as string. */
   @Override

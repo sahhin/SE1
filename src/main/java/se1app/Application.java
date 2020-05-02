@@ -5,6 +5,7 @@ import se1app.entities.*;
 import se1app.facade.Webserver;
 import se1app.persistency.*;
 import se1app.repositories.CustomerRepository;
+import se1app.usecases.OrderUseCase;
 
 
 /** Main class of our application, containing the entry point and setup. */
@@ -41,13 +42,9 @@ public class Application {
     CustomerRepository.createCustomer("Anna", "Smith", "a.smith@outlook.uk");
     CustomerRepository.createCustomer("Marlene", "Schulze", "ms83@bremen-online.de");
     CustomerRepository.createCustomer("Anton", "Smirnov", "asmi-89@inbox.ru");
-    var anna = CustomerRepository.getCustomerById(2);
-    anna.orderItems(Arrays.asList("fish", "chips"));
-    CustomerRepository.saveCustomer(anna);
-    var anton = CustomerRepository.getCustomerById(4);
-    anton.orderItems(Arrays.asList("pirog", "beef", "salad"));
-    anton.orderItems(Arrays.asList("vodka"));
-    CustomerRepository.saveCustomer(anton);
+    OrderUseCase.orderItems(2, Arrays.asList("fish", "chips"));
+    OrderUseCase.orderItems(4, Arrays.asList("pirog", "beef", "salad"));
+    OrderUseCase.orderItems(4, Arrays.asList("vodka"));
   }
 
 
@@ -62,8 +59,8 @@ public class Application {
     // Configure the database connection.
     H2Database.configure(new DatabaseConfig() {{
       dbName = "./customers";
-      startWebserver = true;
       annotatedClasses = Arrays.asList(Customer.class, Order.class);
+      //startWebserver = true;
       //showSqlQueries = true;
     }});
 

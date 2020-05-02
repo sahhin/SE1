@@ -68,19 +68,4 @@ public class CustomerRepositoryTest {
     var customer3 = CustomerRepository.getCustomerById(3);
     assertEquals(null, customer3);
   }
-
-
-  /** Test customer update. */
-  @Test
-  public void customerUpdateTest() {
-    createTestCustomers();
-    var customer2 = CustomerRepository.getCustomerById(2);
-    assertEquals(0, customer2.getOrders().size());
-    customer2.orderItems(Arrays.asList("Bratwurst", "Bockwurst"));
-    CustomerRepository.saveCustomer(customer2);        // save to DB
-    customer2 = CustomerRepository.getCustomerById(2); // and reload from DB
-    assertEquals(1, customer2.getOrders().size());
-    var firstOrder = customer2.getOrders().get(0);
-    assertEquals(2, firstOrder.getItems().size());
-  }
 }
