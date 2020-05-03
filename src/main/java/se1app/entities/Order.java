@@ -3,11 +3,13 @@ package se1app.entities;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 /** An order contains a set of items. */
 @Entity
 @Table(name="orders")
+@JsonIgnoreProperties(value = { "customer" })
 public class Order {
 
   @Id

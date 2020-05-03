@@ -47,6 +47,7 @@ public class Webserver {
 
   /** Define backend routes (REST endpoints). */
   private void defineRoutes() {
+    new CustomerController(_server);
     _server.get("/", ctx -> ctx.result("Hello World"));
   }
 }

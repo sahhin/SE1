@@ -97,4 +97,25 @@ public class Customer {
   public List<Order> getOrders() {
     return _orders;
   }
+
+
+  /** Set a new first name.
+   * @param newFirstName The new first name. */
+  public void setFirstName(String newFirstName) {
+    _firstName = newFirstName;
+  }
+
+
+  /** Set a new last name.
+   * @param newLastName The new last name. */
+  public void setLastName(String newLastName) {
+    _lastName = newLastName;
+  }
+
+
+  /** Set a new e-mail address.
+   * @param newEmailAddress The new e-mail address. */
+  public void setEmailAddress(EmailType newEmailAddress) {
+    _emailAddress = newEmailAddress;
+  }
 }
