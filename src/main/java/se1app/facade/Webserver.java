@@ -2,6 +2,8 @@ package se1app.facade;
 
 import io.javalin.Javalin;
 import io.javalin.http.staticfiles.Location;
+import io.javalin.plugin.rendering.vue.VueComponent;
+
 import java.nio.file.Paths;
 
 
@@ -48,6 +50,10 @@ public class Webserver {
   /** Define backend routes (REST endpoints). */
   private void defineRoutes() {
     new CustomerController(_server);
-    _server.get("/", ctx -> ctx.result("Hello World"));
+    _server.get("/", new VueComponent("<home-comp></home-comp>"));
+    _server.get("/customers", new VueComponent("<customers-comp></customers-comp>"));
+    _server.get("/orders", new VueComponent("<orders-comp></orders-comp>"));
+    _server.get("/about", new VueComponent("<about-comp></about-comp>"));
+    _server.get("/test", ctx -> ctx.result("Hello World"));
   }
 }

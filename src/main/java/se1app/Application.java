@@ -18,7 +18,7 @@ public class Application {
   /** Create the application. */
   public Application() {
     _dbServer = H2Database.getInstance();
-    _webServer = new Webserver(7000, null);
+    _webServer = new Webserver(7000, "src/main/resources/webroot");
   }
 
 
@@ -42,9 +42,13 @@ public class Application {
     CustomerRepository.createCustomer("Anna", "Smith", "a.smith@outlook.uk");
     CustomerRepository.createCustomer("Marlene", "Schulze", "ms83@bremen-online.de");
     CustomerRepository.createCustomer("Anton", "Smirnov", "asmi-89@inbox.ru");
+    CustomerRepository.createCustomer("Leon", "Hahn", "leonhahn@jourrapide.com");
+    CustomerRepository.createCustomer("Lisa", "Hüber", "lihue@aboutads.info");
     OrderUseCase.orderItems(2, Arrays.asList("fish", "chips"));
     OrderUseCase.orderItems(4, Arrays.asList("pirog", "beef", "salad"));
     OrderUseCase.orderItems(4, Arrays.asList("vodka"));
+    OrderUseCase.orderItems(5, Arrays.asList("cream cheese"));
+    OrderUseCase.orderItems(6, Arrays.asList("butter", "potatoes"));
   }
 
 
@@ -93,3 +97,8 @@ public class Application {
 // H2 database: http://www.h2database.com/html/features.html
 // Javalin UI Tutorial: https://javalin.io/tutorials/simple-frontends-with-javalin-and-vue
 // Mapping Attributnamen -> Datenbank: https://www.baeldung.com/hibernate-naming-strategy
+
+// Testdatengenerierung
+// -----------------------------------
+// - https://www.fakenamegenerator.com/gen-random-gr-gr.php
+// - https://www.mockaroo.com
