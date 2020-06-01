@@ -23,6 +23,7 @@ dependencies {
   implementation 'com.fasterxml.jackson.core:jackson-databind:2.10.1' // Java JSON serialization library.
   implementation 'org.slf4j:slf4j-simple:1.7.30'                      // Logging framework needed by Javalin
   implementation 'org.webjars.npm:vue:2.6.11'                         // Vue.js framework for web frontend
+  implementation 'org.webjars.npm:axios:0.19.2'                       // Axios 3rd party HTTP client for frontend
   testImplementation 'io.rest-assured:rest-assured:4.3.0'             // Testing framework for REST APIs
   testImplementation 'org.junit.jupiter:junit-jupiter-api:5.3.2'      //| JUnit 5 uses multiple packages, we need its API and
   testImplementation 'org.junit.jupiter:junit-jupiter-params:5.6.1'   //| the extension for parameterized tests (during build)
