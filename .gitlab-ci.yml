@@ -1,0 +1,9 @@
+image: openjdk:13-alpine
+
+stages:
+  - build
+
+build:
+  stage: build
+  script:
+    - ./gradlew build
