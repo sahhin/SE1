@@ -26,7 +26,7 @@ public class UserController {
 
 
     /**
-     * Create a new customer controller.
+     * Create a new user controller.
      *
      * @param server Javalin server handle to register REST endpoints.
      */
@@ -40,7 +40,7 @@ public class UserController {
 
 
     /**
-     * Get all customers.
+     * Get all users.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -51,7 +51,7 @@ public class UserController {
 
 
     /**
-     * Get a specific customer by URL parameter ID.
+     * Get a specific user by URL parameter ID.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -62,7 +62,7 @@ public class UserController {
 
 
     /**
-     * Delete a customer by URL parameter ID.
+     * Delete a user by URL parameter ID.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -75,7 +75,7 @@ public class UserController {
     }
 
     /**
-     * Create a new customer with the data specified in request body.
+     * Create a new user with the data specified in request body.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -92,7 +92,7 @@ public class UserController {
                     jsonNode.get("lastName").asText(),
                     jsonNode.get("emailAddress").get("userEmail").asText(),
                     jsonNode.get("address").get("userAdress").asText(),
-                    neighborhood, events
+                    neighborhood
             );
             if (savedUser != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
@@ -105,7 +105,7 @@ public class UserController {
 
 
     /**
-     * Update the data of a customer specified by URL parameter.
+     * Update the data of a user specified by URL parameter.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -145,12 +145,12 @@ public class UserController {
 
 
     /**
-     * Helper function to parse a customer ID from the URL and retrieve it.
+     * Helper function to parse a user ID from the URL and retrieve it.
      * This method also performs HTTP-400 and 404 error handling.
      *
      * @param ctx          The web server context.
      * @param endpointDesc Optional description of endpoint for console error message. May be null!
-     * @return The customer or 'null', if access failed (query invalid or customer not found).
+     * @return The user or 'null', if access failed (query invalid or customer not found).
      */
     private static User fetchUser(Context ctx, String endpointDesc) {
         try {

@@ -42,14 +42,14 @@ public class EventRepositoryTest {
   private static void createTestEvents() {
     Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
     User user = new User(new Date(80,1,1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
-    EventRepository.createEvent(user, "Waddup", new Date(11,11,4), new TimeType(15,00,17,30), EventStatus.EVENT_PLANNED, neighborhood);
-    EventRepository.createEvent(user, "Hey", new Date(11,11,4), new TimeType(15,00,17,30), EventStatus.EVENT_PLANNED, neighborhood);
-    EventRepository.createEvent(user, "Yo", new Date(11,11,4), new TimeType(15,00,17,30), EventStatus.EVENT_PLANNED, neighborhood);
+    EventRepository.createEvent(user, "Waddup", new Date(11,11,4), new TimeType(15,25,17,30), EventStatus.EVENT_PLANNED, neighborhood);
+    EventRepository.createEvent(user, "Hey", new Date(11,11,4), new TimeType(15,30,17,30), EventStatus.EVENT_PLANNED, neighborhood);
+    EventRepository.createEvent(user, "Yo", new Date(11,11,4), new TimeType(15,30,17,30), EventStatus.EVENT_PLANNED, neighborhood);
 
   }
 
 
-  /** Test customer creation. */
+  /** Test event creation. */
   @Test
   public void eventCreationTest() {
     assertEquals(0, EventRepository.getAllEvents().size());
@@ -58,7 +58,7 @@ public class EventRepositoryTest {
   }
 
 
-  /** Test customer query by ID. */
+  /** Test event query by ID. */
   @Test
   public void eventQueryTest() {
     createTestEvents();
@@ -67,7 +67,7 @@ public class EventRepositoryTest {
   }
 
 
-  /** Test customer deletion. */
+  /** Test event deletion. */
   @Test
   public void eventDeletionTest() {
     createTestEvents();

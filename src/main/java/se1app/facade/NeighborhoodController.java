@@ -20,7 +20,7 @@ public class NeighborhoodController {
 
 
     /**
-     * Create a new customer controller.
+     * Create a new neighborhood controller.
      *
      * @param server Javalin server handle to register REST endpoints.
      */
@@ -34,7 +34,7 @@ public class NeighborhoodController {
 
 
     /**
-     * Get all customers.
+     * Get all neighborhoods.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -45,7 +45,7 @@ public class NeighborhoodController {
 
 
     /**
-     * Get a specific customer by URL parameter ID.
+     * Get a specific neighborhood by URL parameter ID.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -56,7 +56,7 @@ public class NeighborhoodController {
 
 
     /**
-     * Delete a customer by URL parameter ID.
+     * Delete a neighborhood by URL parameter ID.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -69,7 +69,7 @@ public class NeighborhoodController {
     }
 
     /**
-     * Create a new customer with the data specified in request body.
+     * Create a new neighborhood with the data specified in request body.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -96,7 +96,7 @@ public class NeighborhoodController {
 
 
     /**
-     * Update the data of a customer specified by URL parameter.
+     * Update the data of a neighborhood specified by URL parameter.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -121,7 +121,7 @@ public class NeighborhoodController {
                 NeighborhoodRepository.saveNeighborhood(neighborhood);
                 ctx.res.setStatus(200);
             } catch (JsonProcessingException | InvalidEmailException ex) {
-                System.err.println("[UserController] updateUser: " + ex);
+                System.err.println("[neighborhood] updateNeighborhood: " + ex);
                 ctx.res.sendError(400, ex.toString());
             }
         }
@@ -129,12 +129,12 @@ public class NeighborhoodController {
 
 
     /**
-     * Helper function to parse a customer ID from the URL and retrieve it.
+     * Helper function to parse a neighborhood ID from the URL and retrieve it.
      * This method also performs HTTP-400 and 404 error handling.
      *
      * @param ctx          The web server context.
      * @param endpointDesc Optional description of endpoint for console error message. May be null!
-     * @return The customer or 'null', if access failed (query invalid or customer not found).
+     * @return The neighborhood or 'null', if access failed (query invalid or customer not found).
      */
     private static Neighborhood fetchNeighborhood(Context ctx, String endpointDesc) {
         try {
@@ -148,7 +148,7 @@ public class NeighborhoodController {
                     ctx.res.sendError(404, msg);
                 }
             } catch (NumberFormatException ex) {
-                var msg = "Failed to parse user identifier!";
+                var msg = "Failed to parse neighborhood identifier!";
                 if (endpointDesc != null) System.err.println("[NeighborhoodController] " + endpointDesc + ": " + msg);
                 ctx.res.sendError(400, msg);
             }

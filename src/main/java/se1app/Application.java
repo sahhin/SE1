@@ -58,7 +58,7 @@ public class Application {
         Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
         User user = new User(new Date(80, 1, 1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
         Event events = new Event(user, "SE",new Date(80, 1, 1), new TimeType(15,15,16,16), EventStatus.EVENT_PLANNED, neighborhood);
-        UserRepository.createUser(new Date(96, 1, 14), "Horst", "Müller", "thehorst_64@gmail.com", "Berliner Tor 7", neighborhood, events);
+        UserRepository.createUser(new Date(96, 1, 14), "Horst", "Müller", "thehorst_64@gmail.com", "Berliner Tor 7", neighborhood);
 
         EventRepository.createEvent(user, "Waddup", new Date(11, 11, 11), new TimeType(15,15,16,16), EventStatus.EVENT_RELEASED, neighborhood);
 
@@ -96,8 +96,8 @@ public class Application {
             application.insertTestData();
         }
 
-        // Print all customers to console.
-        UserRepository.printUserTable();
+//        // Print all customers to console.
+//        UserRepository.printUserTable();
 
         // All manual setup done up to here.
         // Start the web server and listen for connections until shutdown is ordered.

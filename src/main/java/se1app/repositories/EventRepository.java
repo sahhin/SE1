@@ -13,15 +13,20 @@ import java.util.List;
 
 
 /**
- * Repository class to load and save customers from/to the database.
+ * Repository class to load and save event from/to the database.
  */
 public class EventRepository {
 
 
     /**
-     * Create a new customer and save them in the database.
      *
-     * @return The customer object or 'null' if creation failed.
+     * @param user Organiser of event
+     * @param eventName Name of event
+     * @param eventDate Date of event
+     * @param eventTime Start time and end time of event
+     * @param eventStatusId Status of event. See EventStatus
+     * @param neighborhood Neighborhood in which event takes place
+     * @return Created event or null
      */
     public static Event createEvent(User user, String eventName, Date eventDate, TimeType eventTime, EventStatus eventStatusId, Neighborhood neighborhood) {
         try {
@@ -34,13 +39,9 @@ public class EventRepository {
         }
     }
 
-    public static void inviteUser(int userId, int eventId) {
-
-    }
-
-
     /**
-     * Save (=update) an existing customer to the database.
+     * Save (=update) an existing event to the database.
+     * @param event Event to be saved
      */
     public static void saveEvent(Event event) {
         var session = H2Database.getInstance().getSession();
@@ -50,9 +51,9 @@ public class EventRepository {
     }
 
     /**
-     * Get all customers from the database.
+     * Get all event from the database.
      *
-     * @return A list with customers. May be empty if the database contains no customers.
+     * @return A list with events. May be empty if the database contains no events.
      */
     public static List<Event> getAllEvents() {
         var session = H2Database.getInstance().getSession();
@@ -62,9 +63,9 @@ public class EventRepository {
 
 
     /**
-     * Get a customer by its identifier.
-     *
-     * @return The customer or 'null' if not found.
+     * Get a event by its identifier.
+     * @param eventId Id of specific event
+     * @return Desired event
      */
     public static Event getEventById(int eventId) {
         var session = H2Database.getInstance().getSession();
@@ -74,7 +75,8 @@ public class EventRepository {
 
 
     /**
-     * Delete a customer from the database.
+     * Delete an event from the database.
+     * @param eventId Id of specific event
      */
     public static void deleteEventById(int eventId) {
         var session = H2Database.getInstance().getSession();
@@ -82,21 +84,5 @@ public class EventRepository {
         var transaction = session.beginTransaction();
         session.delete(event);
         transaction.commit();
-    }
-
-
-    /**
-     * Print a table of all customers to the console. This
-     * method is not really a repository function, it's more
-     * intended to be a helper during debugging and development.
-     */
-    public static void printUserTable() {
-        var events = getAllEvents();
-        System.out.println("Events in database");
-        System.out.println("---------------------------------------");
-        for (var event : events) {
-            System.out.println(event);
-        }
-        System.out.println("---------------------------------------");
     }
 }

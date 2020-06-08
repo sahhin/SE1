@@ -8,6 +8,7 @@ import se1app.persistency.DatabaseConfig;
 import se1app.persistency.H2Database;
 import se1app.repositories.CustomerRepository;
 import se1app.repositories.EventRepository;
+import se1app.repositories.UserRepository;
 import se1app.usecases.EventUseCase;
 import se1app.usecases.OrderUseCase;
 
@@ -33,10 +34,10 @@ public class EventUseCaseTest {
       _db = H2Database.getInstance();
       Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
       User user = new User(new Date(80,1,1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
-      User user2 = new User(new Date(80,1,1), "Testian", "Testmann", "test@test.de", "Teststraße 5", neighborhood);
-      EventRepository.createEvent(user, "Waddup", new Date(11,11,4), new TimeType(15,00,17,30), EventStatus.EVENT_PLANNED, neighborhood);
-      EventRepository.createEvent(user, "Hey", new Date(11,11,4), new TimeType(15,00,17,30), EventStatus.EVENT_PLANNED, neighborhood);
-      EventRepository.createEvent(user, "Yo", new Date(11,11,4), new TimeType(15,00,17,30), EventStatus.EVENT_PLANNED, neighborhood);
+      UserRepository.createUser(new Date(80,1,1), "Testian", "Testmann", "test@test.de", "Teststraße 5", neighborhood);
+      EventRepository.createEvent(user, "Waddup", new Date(11,11,4), new TimeType(15,20,17,30), EventStatus.EVENT_PLANNED, neighborhood);
+      EventRepository.createEvent(user, "Hey", new Date(11,11,4), new TimeType(15,20,17,30), EventStatus.EVENT_PLANNED, neighborhood);
+      EventRepository.createEvent(user, "Yo", new Date(11,11,4), new TimeType(15,20,17,30), EventStatus.EVENT_PLANNED, neighborhood);
     }
 
 
@@ -51,11 +52,12 @@ public class EventUseCaseTest {
     @Test
     public void inviteUserToEvent() {
       Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
-      User user2 = new User(new Date(80,1,1), "Testian", "Testmann", "test@test.de", "Teststraße 5", neighborhood);
-      assertTrue(EventUseCase.inviteUser(user2.getId(), 1));
+      UserRepository.createUser(new Date(80,1,1), "Testian", "Testmann", "test@test.de", "Teststraße 5", neighborhood);
+
+      assertTrue(EventUseCase.inviteUser(UserRepository.getUserById(2).getId(), 1));
     }
 
-    /** Query an non-existing user (failure test #1). */
+    /** Query an non-existing event (failure test #1). */
     @Test
     public void createEventInvalidUserId() {
       assertFalse(EventUseCase.inviteUser(-12, 1));

@@ -4,14 +4,15 @@ import se1app.repositories.EventRepository;
 import se1app.repositories.UserRepository;
 
 
-/** Use case class to place customer orders. */
+/** Use case class to place event orders. */
 public class EventUseCase {
 
-
-  /** Invite user to an event
-   * @param userId Identifier of the customer.
-   * @param items A list of items to order.
-   * @return 'True' if the order was successfully placed. 'False' otherwise. */
+  /**
+   *
+   * @param userId Identifier of the user.
+   * @param eventId Identifier of the event.
+   * @return
+   */
   public static boolean inviteUser(int userId, int eventId) {
     var user = UserRepository.getUserById(userId);
     var event = EventRepository.getEventById(eventId);

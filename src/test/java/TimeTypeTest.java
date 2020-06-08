@@ -19,8 +19,8 @@ public class TimeTypeTest {
             "18:45",
             "5:00"
     })
-    public void createTimeFromStringSuccess(String time) {
-        new TimeType(time);
+    public void createTimeFromStringSuccess(int startHours, int startMins, int endHours, int endMins) {
+        new TimeType(startHours, startMins, endHours, endMins);
     }
 
 
@@ -34,11 +34,11 @@ public class TimeTypeTest {
             "abc",
             "drölf"
     })
-    public void createTimeFromStringFail(String time) {
+    public void createTimeFromStringFail(int startHours, int startMins, int endHours, int endMins) {
         Assertions.assertThrows(
                 InvalidTimeException.class,
-                () ->  new TimeType(time),
-                "'" + time + "' is no valid time!"
+                () ->  new TimeType(startHours, startMins, endHours, endMins),
+                "'" + startHours + ":"+startMins +"- "+ endHours +":" +endMins + "' is no valid time!"
         );
     }
 }

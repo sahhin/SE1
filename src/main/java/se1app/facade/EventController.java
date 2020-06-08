@@ -19,13 +19,13 @@ import java.util.Date;
 
 
 /**
- * REST controller for the customer endpoint.
+ * REST controller for the event endpoint.
  */
 public class EventController {
 
 
     /**
-     * Create a new customer controller.
+     * Create a new event controller.
      *
      * @param server Javalin server handle to register REST endpoints.
      */
@@ -39,7 +39,7 @@ public class EventController {
 
 
     /**
-     * Get all customers.
+     * Get all events.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -50,7 +50,7 @@ public class EventController {
 
 
     /**
-     * Get a specific customer by URL parameter ID.
+     * Get a specific event by URL parameter ID.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -61,7 +61,7 @@ public class EventController {
 
 
     /**
-     * Delete a customer by URL parameter ID.
+     * Delete a event by URL parameter ID.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -74,7 +74,7 @@ public class EventController {
     }
 
     /**
-     * Create a new customer with the data specified in request body.
+     * Create a new event with the data specified in request body.
      *
      * @param ctx HTTP context (request/response handle).
      */
@@ -102,7 +102,7 @@ public class EventController {
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
         } catch (JsonProcessingException | ParseException ex) {
             var msg = "JSON parser exception: " + ex;
-            System.err.println("[UserController] createEvent: " + msg);
+            System.err.println("[EventController] createEvent: " + msg);
             ctx.res.sendError(400, msg);
         }
     }
@@ -139,7 +139,7 @@ public class EventController {
                 EventRepository.saveEvent(event);
                 ctx.res.setStatus(200);
             } catch (JsonProcessingException | InvalidEmailException | ParseException ex) {
-                System.err.println("[UserController] updateUser: " + ex);
+                System.err.println("[EventController] updateEvent: " + ex);
                 ctx.res.sendError(400, ex.toString());
             }
         }
@@ -147,12 +147,12 @@ public class EventController {
 
 
     /**
-     * Helper function to parse a customer ID from the URL and retrieve it.
+     * Helper function to parse a event ID from the URL and retrieve it.
      * This method also performs HTTP-400 and 404 error handling.
      *
      * @param ctx          The web server context.
      * @param endpointDesc Optional description of endpoint for console error message. May be null!
-     * @return The customer or 'null', if access failed (query invalid or customer not found).
+     * @return The event or 'null', if access failed (query invalid or customer not found).
      */
     private static Event fetchEvent(Context ctx, String endpointDesc) {
         try {
@@ -166,7 +166,7 @@ public class EventController {
                     ctx.res.sendError(404, msg);
                 }
             } catch (NumberFormatException ex) {
-                var msg = "Failed to parse user identifier!";
+                var msg = "Failed to parse event identifier!";
                 if (endpointDesc != null) System.err.println("[EventController] " + endpointDesc + ": " + msg);
                 ctx.res.sendError(400, msg);
             }
