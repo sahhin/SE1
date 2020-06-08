@@ -1,11 +1,16 @@
 package se1app;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+
 import se1app.entities.*;
 import se1app.facade.Webserver;
 import se1app.persistency.*;
-import se1app.repositories.CustomerRepository;
-import se1app.usecases.OrderUseCase;
+import se1app.repositories.EventRepository;
+import se1app.repositories.NeighborhoodRepository;
+import se1app.repositories.UserRepository;
 
 
 /** Main class of our application, containing the entry point and setup. */
@@ -38,17 +43,14 @@ public class Application {
 
   /** Fill an empty database with some test data. */
   public void insertTestData() {
-    CustomerRepository.createCustomer("Horst", "Müller", "thehorst_64@gmail.com");
-    CustomerRepository.createCustomer("Anna", "Smith", "a.smith@outlook.uk");
-    CustomerRepository.createCustomer("Marlene", "Schulze", "ms83@bremen-online.de");
-    CustomerRepository.createCustomer("Anton", "Smirnov", "asmi-89@inbox.ru");
-    CustomerRepository.createCustomer("Leon", "Hahn", "leonhahn@jourrapide.com");
-    CustomerRepository.createCustomer("Lisa", "Hüber", "lihue@aboutads.info");
-    OrderUseCase.orderItems(2, Arrays.asList("fish", "chips"));
-    OrderUseCase.orderItems(4, Arrays.asList("pirog", "beef", "salad"));
-    OrderUseCase.orderItems(4, Arrays.asList("vodka"));
-    OrderUseCase.orderItems(5, Arrays.asList("cream cheese"));
-    OrderUseCase.orderItems(6, Arrays.asList("butter", "potatoes"));
+    Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
+    User user = new User(new Date(80,1,1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
+    Event events = new Event(user,"SE", new Date(2020, 1, 1), "15:00", "16:00", 12, 1,neighborhood);
+    UserRepository.createUser(new Date(96, 1, 14), "Horst", "Müller", "thehorst_64@gmail.com", "Berliner Tor 7", neighborhood, events);
+
+    EventRepository.createEvent(user, "Waddup", new Date(11,11,11),"11:11", "11:12", 12, 0, neighborhood);
+
+    NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
   }
 
 
@@ -62,10 +64,10 @@ public class Application {
 
     // Configure the database connection.
     H2Database.configure(new DatabaseConfig() {{
-      dbName = "./customers";
-      annotatedClasses = Arrays.asList(Customer.class, Order.class);
-      //startWebserver = true;
-      //showSqlQueries = true;
+      dbName = "./neighborino";
+      annotatedClasses = Arrays.asList(User.class, Neighborhood.class, Event.class);
+      startWebserver = true;
+      showSqlQueries = true;
     }});
 
 
@@ -73,18 +75,16 @@ public class Application {
     var application = new Application();
 
     // Register shutdown hook.
-    Runtime.getRuntime().addShutdownHook(new Thread( () -> {
-      application.stop();
-    }));
+    Runtime.getRuntime().addShutdownHook(new Thread(application::stop));
 
     // If this is an empty database, populate tables with test data.
-    if (CustomerRepository.getAllCustomers().size() == 0) {
+    if (UserRepository.getAllUsers().size() == 0) {
       System.out.println("Empty database found! Filling it with test data!");
       application.insertTestData();
     }
 
     // Print all customers to console.
-    CustomerRepository.printCustomerTable();
+    UserRepository.printUserTable();
 
     // All manual setup done up to here.
     // Start the web server and listen for connections until shutdown is ordered.

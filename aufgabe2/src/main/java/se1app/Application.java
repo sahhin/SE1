@@ -38,13 +38,15 @@ public class Application {
 
   /** Fill an empty database with some test data. */
   public void insertTestData() {
-    CustomerRepository.createCustomer("Horst", "Müller", "thehorst_64@gmail.com", "Berliner Tor 7");
-    CustomerRepository.createCustomer("Anna", "Smith", "a.smith@outlook.uk", "Berliner Tor 7");
-    CustomerRepository.createCustomer("Marlene", "Schulze", "ms83@bremen-online.de", "Berliner Tor 7");
-    CustomerRepository.createCustomer("Anton", "Smirnov", "asmi-89@inbox.ru", "Berliner Tor 7");
-    OrderUseCase.orderItems(2, Arrays.asList("fish", "chips"));
-    OrderUseCase.orderItems(4, Arrays.asList("pirog", "beef", "salad"));
-    OrderUseCase.orderItems(4, Arrays.asList("vodka"));
+    public static User createUser(Date userBirthday, String firstName, String lastName, String userEmail, String userAdress) {
+
+      UserRepository.createUser(new Date("01.01.1980"), "Horst", "Müller", "thehorst_64@gmail.com", "Berliner Tor 7");
+      //    CustomerRepository.createCustomer("Anna", "Smith", "a.smith@outlook.uk", "Berliner Tor 7");
+//    CustomerRepository.createCustomer("Marlene", "Schulze", "ms83@bremen-online.de", "Berliner Tor 7");
+//    CustomerRepository.createCustomer("Anton", "Smirnov", "asmi-89@inbox.ru", "Berliner Tor 7");
+//    OrderUseCase.orderItems(2, Arrays.asList("fish", "chips"));
+//    OrderUseCase.orderItems(4, Arrays.asList("pirog", "beef", "salad"));
+//    OrderUseCase.orderItems(4, Arrays.asList("vodka"));
   }
 
 
@@ -58,8 +60,8 @@ public class Application {
 
     // Configure the database connection.
     H2Database.configure(new DatabaseConfig() {{
-      dbName = "./customers";
-      annotatedClasses = Arrays.asList(Customer.class, Order.class);
+      dbName = "./users";
+      annotatedClasses = Arrays.asList(User.class);
       //startWebserver = true;
       //showSqlQueries = true;
     }});
@@ -74,13 +76,13 @@ public class Application {
     }));
 
     // If this is an empty database, populate tables with test data.
-    if (CustomerRepository.getAllCustomers().size() == 0) {
+    if (CustomerRepository.getAllUsers().size() == 0) {
       System.out.println("Empty database found! Filling it with test data!");
       application.insertTestData();
     }
 
     // Print all customers to console.
-    CustomerRepository.printCustomerTable();
+    UserRepository.printCustomerTable();
 
     // All manual setup done up to here.
     // Start the web server and listen for connections until shutdown is ordered.

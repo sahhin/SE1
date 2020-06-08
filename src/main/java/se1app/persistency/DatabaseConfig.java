@@ -14,7 +14,7 @@ public class DatabaseConfig {
   public String dbName = "./test";
   public String user = "sa";
   public String password = "";
-  public boolean startWebserver = false;
+  public boolean startWebserver = true;
 
   // Hibernate settings.
   public boolean showSqlQueries = false;
