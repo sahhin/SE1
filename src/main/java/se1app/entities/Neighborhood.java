@@ -144,5 +144,8 @@ public class Neighborhood {
     public void setNeighborhoodCountry(String neighborhoodCountry) {
         this._neighborhoodCountry = neighborhoodCountry;
     }
+    public void setNeighborhoodName(String neighborhoodName) {
+        this._neighborhoodName = neighborhoodName;
+    }
 
 }

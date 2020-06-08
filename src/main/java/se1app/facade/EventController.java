@@ -4,14 +4,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import se1app.datatypes.AdressType;
-import se1app.datatypes.EmailType;
+import se1app.datatypes.EventStatus;
+import se1app.datatypes.TimeType;
 import se1app.entities.Event;
 import se1app.entities.Neighborhood;
 import se1app.entities.User;
 import se1app.exceptions.InvalidEmailException;
 import se1app.repositories.EventRepository;
-import se1app.repositories.UserRepository;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -84,18 +83,21 @@ public class EventController {
             var jsonNode = new ObjectMapper().readTree(ctx.body());
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
-            User user = new User(new Date(80,1,1), "Test", "Hallo", "test@test.de", "Teststr.", neighborhood);
-            Event events = new Event(user, "Test", new Date(2020, 1, 1), "15:00", "16:00", 12, 1,neighborhood);
+            User user = new User(new Date(80, 1, 1), "Test", "Hallo", "test@test.de", "Teststr.", neighborhood);
+            Event events = new Event(user, "Test", new Date(2020, 1, 1), new TimeType(15, 00, 16, 00), EventStatus.EVENT_PLANNED, neighborhood);
             var savedEvent = EventRepository.createEvent(
                     user,
                     jsonNode.get("eventName").asText(),
                     sdf.parse(jsonNode.get("eventDate").toString()),
-                    jsonNode.get("eventStartTime").asText(),
-                    jsonNode.get("eventEndTime").asText(),
-                    jsonNode.get("eventOrganizerId").asInt(),
-                    jsonNode.get("eventStatusId").asInt(),
+                    new TimeType(
+                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(0, jsonNode.get("eventTime").asText().charAt(':'))),
+                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(jsonNode.get("eventTime").asText().charAt(':'), jsonNode.get("eventTime").asText().charAt(' '))),
+                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(jsonNode.get("eventTime").asText().charAt('-') + 1), jsonNode.get("eventTime").asText().charAt(':')),
+                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(jsonNode.get("eventTime").asText().charAt(':')))
+                    ),
+                    EventStatus.valueOf(jsonNode.get("eventStatusId").asText()),
                     neighborhood
-                    );
+            );
             if (savedEvent != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
         } catch (JsonProcessingException | ParseException ex) {
@@ -123,17 +125,15 @@ public class EventController {
                 if (jsonNode.get("eventName") != null) {
                     event.setEventName(jsonNode.get("eventName").asText());
                 }
-                if (jsonNode.get("eventStartTime") != null) {
-                    event.setEventStartTime(jsonNode.get("eventStartTime").asText());
-                }
-                if (jsonNode.get("eventEndTime") != null) {
-                    event.setEventEndTime(jsonNode.get("eventEndTime").asText());
+                if (jsonNode.get("eventTime") != null) {
+                    event.setEventTime(new TimeType(
+                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(0, jsonNode.get("eventTime").asText().charAt(':'))),
+                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(jsonNode.get("eventTime").asText().charAt(':'), jsonNode.get("eventTime").asText().charAt(' '))),
+                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(jsonNode.get("eventTime").asText().charAt('-') + 1), jsonNode.get("eventTime").asText().charAt(':')),
+                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(jsonNode.get("eventTime").asText().charAt(':')))));
                 }
                 if (jsonNode.get("eventStatusId") != null) {
-                    event.setEventStatusId(jsonNode.get("eventStatusId").asInt());
-                }
-                if (jsonNode.get("eventOrganizerId") != null) {
-                    event.setEventEndTime(jsonNode.get("eventEndTime").asText());
+                    event.setEventStatusId(EventStatus.valueOf(jsonNode.get("eventStatusId").asText()));
                 }
 
                 EventRepository.saveEvent(event);

@@ -5,7 +5,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
-import se1app.datatypes.DateTyp;
+import se1app.datatypes.EventStatus;
+import se1app.datatypes.TimeType;
 import se1app.entities.*;
 import se1app.facade.Webserver;
 import se1app.persistency.*;
@@ -56,11 +57,10 @@ public class Application {
     public void insertTestData() {
         Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
         User user = new User(new Date(80, 1, 1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
-        DateTyp date = new DateTyp(2020, 1, 1, 14, 00, 15, 00);
-        Event events = new Event(user, "SE", date, 1, neighborhood);
+        Event events = new Event(user, "SE",new Date(80, 1, 1), new TimeType(15,15,16,16), EventStatus.EVENT_PLANNED, neighborhood);
         UserRepository.createUser(new Date(96, 1, 14), "Horst", "Müller", "thehorst_64@gmail.com", "Berliner Tor 7", neighborhood, events);
 
-        EventRepository.createEvent(user, "Waddup", new Date(11, 11, 11), "11:11", "11:12", 12, 0, neighborhood);
+        EventRepository.createEvent(user, "Waddup", new Date(11, 11, 11), new TimeType(15,15,16,16), EventStatus.EVENT_RELEASED, neighborhood);
 
         NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
     }

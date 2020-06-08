@@ -4,15 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-import se1app.entities.Event;
 import se1app.entities.Neighborhood;
 import se1app.entities.User;
 import se1app.exceptions.InvalidEmailException;
-import se1app.repositories.EventRepository;
+import se1app.repositories.NeighborhoodRepository;
 
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -28,11 +25,11 @@ public class NeighborhoodController {
      * @param server Javalin server handle to register REST endpoints.
      */
     public NeighborhoodController(Javalin server) {
-        server.get("/api/events", NeighborhoodController::getAllEvents);
-        server.get("/api/events/:event-id", NeighborhoodController::getEventById);
-        server.delete("/api/events/:event-id", NeighborhoodController::deleteEventById);
-        server.post("/api/events", NeighborhoodController::createEvent);
-        server.put("/api/events/:event-id", NeighborhoodController::updateEvent);
+        server.get("/api/neighborhood", NeighborhoodController::getAllNeighborhood);
+        server.get("/api/neighborhood/:neighborhood-id", NeighborhoodController::getNeighborhoodById);
+        server.delete("/api/neighborhood/:neighborhood-id", NeighborhoodController::deleteNeighborhoodById);
+        server.post("/api/neighborhood", NeighborhoodController::createNeighborhood);
+        server.put("/api/neighborhood/:neighborhood-id", NeighborhoodController::updateNeighborhood);
     }
 
 
@@ -41,9 +38,9 @@ public class NeighborhoodController {
      *
      * @param ctx HTTP context (request/response handle).
      */
-    private static void getAllEvents(Context ctx) {
-        var eventList = EventRepository.getAllEvents();
-        ctx.json(eventList);
+    private static void getAllNeighborhood(Context ctx) {
+        var neighborhoodList = NeighborhoodRepository.getAllNeighborhoods();
+        ctx.json(neighborhoodList);
     }
 
 
@@ -52,9 +49,9 @@ public class NeighborhoodController {
      *
      * @param ctx HTTP context (request/response handle).
      */
-    private static void getEventById(Context ctx) {
-        var event = fetchEvent(ctx, "getEventById");
-        if (event != null) ctx.json(event);
+    private static void getNeighborhoodById(Context ctx) {
+        var neighborhood = fetchNeighborhood(ctx, "getNeighborhoodById");
+        if (neighborhood != null) ctx.json(neighborhood);
     }
 
 
@@ -63,10 +60,10 @@ public class NeighborhoodController {
      *
      * @param ctx HTTP context (request/response handle).
      */
-    private static void deleteEventById(Context ctx) {
-        var event = fetchEvent(ctx, "deleteEventById");
-        if (event != null) {
-            EventRepository.deleteEventById(event.getEventId());
+    private static void deleteNeighborhoodById(Context ctx) {
+        var neighborhood = fetchNeighborhood(ctx, "deleteNeighborhoodById");
+        if (neighborhood != null) {
+            NeighborhoodRepository.deleteNeighborhoodById(neighborhood.getNeighborhoodId());
             ctx.res.setStatus(200);
         }
     }
@@ -76,28 +73,23 @@ public class NeighborhoodController {
      *
      * @param ctx HTTP context (request/response handle).
      */
-    private static void createEvent(Context ctx) throws IOException {
+    private static void createNeighborhood(Context ctx) throws IOException {
         try {
             var jsonNode = new ObjectMapper().readTree(ctx.body());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
-            User user = new User(new Date(80,1,1), "Test", "Hallo", "test@test.de", "Teststr.", neighborhood);
-            Event events = new Event(user, "Test", new Date(2020, 1, 1), "15:00", "16:00", 12, 1,neighborhood);
-            var savedEvent = EventRepository.createEvent(
-                    user,
-                    jsonNode.get("eventName").asText(),
-                    sdf.parse(jsonNode.get("eventDate").toString()),
-                    jsonNode.get("eventStartTime").asText(),
-                    jsonNode.get("eventEndTime").asText(),
-                    jsonNode.get("eventOrganizerId").asInt(),
-                    jsonNode.get("eventStatusId").asInt(),
-                    neighborhood
-                    );
-            if (savedEvent != null) ctx.res.setStatus(201); // 201 - Created (POST success)
+            User user = new User(new Date(80, 1, 1), "Test", "Hallo", "test@test.de", "Teststr.", neighborhood);
+            var savedNeighborhood = NeighborhoodRepository.createNeighborhood(
+                    jsonNode.get("neighborhoodName").asText(),
+                    jsonNode.get("neighborhoodPostalcode").asInt(),
+                    jsonNode.get("neighborhoodCity").asText(),
+                    jsonNode.get("neighborhoodCountry").asText()
+
+            );
+            if (savedNeighborhood != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
-        } catch (JsonProcessingException | ParseException ex) {
+        } catch (JsonProcessingException ex) {
             var msg = "JSON parser exception: " + ex;
-            System.err.println("[UserController] createEvent: " + msg);
+            System.err.println("[NeighborhoodController] createNeighborhood: " + msg);
             ctx.res.sendError(400, msg);
         }
     }
@@ -108,34 +100,27 @@ public class NeighborhoodController {
      *
      * @param ctx HTTP context (request/response handle).
      */
-    private static void updateEvent(Context ctx) throws IOException {
-        var event = fetchEvent(ctx, "updateEvent");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        if (event != null) {
+    private static void updateNeighborhood(Context ctx) throws IOException {
+        var neighborhood = fetchNeighborhood(ctx, "updateNeighborhood");
+        if (neighborhood != null) {
             try {
                 var jsonNode = new ObjectMapper().readTree(ctx.body());
-                if (jsonNode.get("eventDate") != null) {
-                    event.setEventDate(sdf.parse(jsonNode.get("eventDate").toString()));
+                if (jsonNode.get("neighborhoodName") != null) {
+                    neighborhood.setNeighborhoodName(jsonNode.get("neighborhoodName").asText());
                 }
-                if (jsonNode.get("eventName") != null) {
-                    event.setEventName(jsonNode.get("eventName").asText());
+                if (jsonNode.get("neighborhoodPostalcode") != null) {
+                    neighborhood.setNeighborhoodPostalcode(jsonNode.get("neighborhoodPostalcode").asInt());
                 }
-                if (jsonNode.get("eventStartTime") != null) {
-                    event.setEventStartTime(jsonNode.get("eventStartTime").asText());
+                if (jsonNode.get("neighborhoodCity") != null) {
+                    neighborhood.setNeighborhoodCity(jsonNode.get("neighborhoodCity").asText());
                 }
-                if (jsonNode.get("eventEndTime") != null) {
-                    event.setEventEndTime(jsonNode.get("eventEndTime").asText());
-                }
-                if (jsonNode.get("eventStatusId") != null) {
-                    event.setEventStatusId(jsonNode.get("eventStatusId").asInt());
-                }
-                if (jsonNode.get("eventOrganizerId") != null) {
-                    event.setEventEndTime(jsonNode.get("eventEndTime").asText());
+                if (jsonNode.get("neighborhoodCountry") != null) {
+                    neighborhood.setNeighborhoodCountry(jsonNode.get("neighborhoodCountry").asText());
                 }
 
-                EventRepository.saveEvent(event);
+                NeighborhoodRepository.saveNeighborhood(neighborhood);
                 ctx.res.setStatus(200);
-            } catch (JsonProcessingException | InvalidEmailException | ParseException ex) {
+            } catch (JsonProcessingException | InvalidEmailException ex) {
                 System.err.println("[UserController] updateUser: " + ex);
                 ctx.res.sendError(400, ex.toString());
             }
@@ -151,24 +136,24 @@ public class NeighborhoodController {
      * @param endpointDesc Optional description of endpoint for console error message. May be null!
      * @return The customer or 'null', if access failed (query invalid or customer not found).
      */
-    private static Event fetchEvent(Context ctx, String endpointDesc) {
+    private static Neighborhood fetchNeighborhood(Context ctx, String endpointDesc) {
         try {
             try {
-                var eventId = Integer.parseInt(ctx.pathParam("event-id"));
-                var event = EventRepository.getEventById(eventId);
-                if (event != null) return event;
+                var neighborhoodId = Integer.parseInt(ctx.pathParam("neighborhood-id"));
+                var neighborhood = NeighborhoodRepository.getNeighborhoodById(neighborhoodId);
+                if (neighborhood != null) return neighborhood;
                 else {
-                    var msg = "Event #" + eventId + " not found!";
-                    if (endpointDesc != null) System.err.println("[EventController] " + endpointDesc + ": " + msg);
+                    var msg = "Neighborhood #" + neighborhoodId + " not found!";
+                    if (endpointDesc != null) System.err.println("[NeighborhoodController] " + endpointDesc + ": " + msg);
                     ctx.res.sendError(404, msg);
                 }
             } catch (NumberFormatException ex) {
                 var msg = "Failed to parse user identifier!";
-                if (endpointDesc != null) System.err.println("[EventController] " + endpointDesc + ": " + msg);
+                if (endpointDesc != null) System.err.println("[NeighborhoodController] " + endpointDesc + ": " + msg);
                 ctx.res.sendError(400, msg);
             }
         } catch (IOException ex) {
-            System.err.println("[EventController] fetchEvent: IOException: " + ex);
+            System.err.println("[NeighborhoodController] fetchNeighborhood: IOException: " + ex);
         }
         return null;
     }

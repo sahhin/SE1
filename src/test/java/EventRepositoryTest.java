@@ -1,6 +1,8 @@
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import se1app.datatypes.EventStatus;
+import se1app.datatypes.TimeType;
 import se1app.entities.*;
 import se1app.persistency.DatabaseConfig;
 import se1app.persistency.H2Database;
@@ -40,9 +42,9 @@ public class EventRepositoryTest {
   private static void createTestEvents() {
     Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
     User user = new User(new Date(80,1,1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
-    EventRepository.createEvent(user, "Waddup", new Date(11,11,11),"11:11", "11:12", 12, 0, neighborhood);
-    EventRepository.createEvent(user, "Hey", new Date(11,11,11),"11:11", "11:12", 12, 0, neighborhood);
-    EventRepository.createEvent(user, "Yo", new Date(11,11,11),"11:11", "11:12", 12, 0, neighborhood);
+    EventRepository.createEvent(user, "Waddup", new Date(11,11,4), new TimeType(15,00,17,30), EventStatus.EVENT_PLANNED, neighborhood);
+    EventRepository.createEvent(user, "Hey", new Date(11,11,4), new TimeType(15,00,17,30), EventStatus.EVENT_PLANNED, neighborhood);
+    EventRepository.createEvent(user, "Yo", new Date(11,11,4), new TimeType(15,00,17,30), EventStatus.EVENT_PLANNED, neighborhood);
 
   }
 

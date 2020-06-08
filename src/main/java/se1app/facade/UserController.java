@@ -6,6 +6,8 @@ import io.javalin.Javalin;
 import io.javalin.http.Context;
 import se1app.datatypes.AdressType;
 import se1app.datatypes.EmailType;
+import se1app.datatypes.EventStatus;
+import se1app.datatypes.TimeType;
 import se1app.entities.Event;
 import se1app.entities.Neighborhood;
 import se1app.exceptions.InvalidEmailException;
@@ -83,7 +85,7 @@ public class UserController {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
             User user = new User(new Date(80,1,1), "Test", "Hallo", "test@test.de", "Teststr. 15", neighborhood);
-            Event events = new Event(user, "Test", new Date(2020, 1, 1), "15:00", "16:00", 12, 1,neighborhood);
+            Event events = new Event(user, "Test", new Date(2020, 1, 1), new TimeType(15,15,16,16), EventStatus.EVENT_PLANNED,neighborhood);
             var savedUser = UserRepository.createUser(
                     sdf.parse(jsonNode.get("userBirthday").toString()),
                     jsonNode.get("firstName").asText(),

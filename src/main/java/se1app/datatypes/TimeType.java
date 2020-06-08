@@ -10,13 +10,14 @@ import javax.persistence.Embeddable;
 public class TimeType {
 
   private static final String timeRegex =
-    "\\d?\\d:\\d\\d";
+    "\\d?\\d:\\d\\d - \\d?\\d:\\d\\d";
   private String _time;
 
 
   /** Create an time address data type.
    * @throws InvalidTimeException Thrown if input is no valid time. */
-  public TimeType(String time) throws InvalidTimeException {
+  public TimeType(int starthours, int startmins,int endhours, int endmins) throws InvalidTimeException {
+    String time = starthours + ":" + startmins +" - "+endhours + ":" + endmins;
     if (isValid(time)) _time = time;
     else {
       throw new InvalidTimeException(time);

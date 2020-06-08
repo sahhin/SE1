@@ -1,6 +1,7 @@
 package se1app.entities;
 
-import se1app.datatypes.DateTyp;
+import se1app.datatypes.EventStatus;
+import se1app.datatypes.TimeType;
 import se1app.exceptions.InvalidEmailException;
 
 import java.util.Date;
@@ -24,14 +25,17 @@ public class Event {
     private String _eventName;
 
     @Column(name = "eventDate")
-    private DateTyp _eventDate;
+    private Date _eventDate;
+
+    @Column(name = "eventTime")
+    private TimeType _eventTime;
 
     @Column(name = "eventParticipantId")
     @ElementCollection
     private List<User> _eventUser;
 
     @Column(name = "eventStatusId")
-    private int _eventStatusId;
+    private EventStatus _eventStatusId;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -47,9 +51,10 @@ public class Event {
      *
      * @throws InvalidEmailException Thrown if input is no valid e-mail.
      */
-    public Event(User user, String eventName, DateTyp eventDate, int eventStatusId, Neighborhood neighborhood) {
+    public Event(User user, String eventName, Date eventDate, TimeType eventTime, EventStatus eventStatusId, Neighborhood neighborhood) {
         _eventName = eventName;
         _eventDate = eventDate;
+        _eventTime = eventTime;
 //        _eventParticipantId = new ArrayList<>();
         _eventStatusId = eventStatusId;
         _user = user;
@@ -64,9 +69,8 @@ public class Event {
     }
 
     /**
-     * Get the neighborhood identifier.
      *
-     * @return The neighborhood ID.
+     * @return
      */
     public int getEventId() {
         return _id;
@@ -82,15 +86,15 @@ public class Event {
         return _eventName;
     }
 
-    public DateTyp getEventDate() {
+    public Date getEventDate() {
         return _eventDate;
     }
 
-//    public List<Integer> getEventParticipantId() {
-//        return _eventParticipantId;
-//    }
+    public TimeType getEventTime() {
+        return _eventTime;
+    }
 
-    public int getEventStatusId() {
+    public EventStatus getEventStatusId() {
         return _eventStatusId;
     }
 
@@ -101,15 +105,20 @@ public class Event {
         this._eventName = eventName;
     }
 
-    public void setEventDate(DateTyp eventDate) {
+    public void setEventDate(Date eventDate) {
         this._eventDate = eventDate;
+    }
+
+
+    public void setEventTime(TimeType eventTime) {
+        this._eventTime = eventTime;
     }
 
     public void inviteUsers(User user) {
         this._eventUser.add(user);
     }
 
-    public void setEventStatusId(int eventStatusId) {
+    public void setEventStatusId(EventStatus eventStatusId) {
         this._eventStatusId = eventStatusId;
     }
 
