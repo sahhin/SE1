@@ -14,13 +14,11 @@ public class TimeTypeTest {
      */
     @ParameterizedTest
     @ValueSource(strings = {
-            "15:00",
-            "21:00",
-            "18:45",
-            "5:00"
-    })
-    public void createTimeFromStringSuccess(int startHours, int startMins, int endHours, int endMins) {
-        new TimeType(startHours, startMins, endHours, endMins);
+            "15,15,16,11"
+    } )
+    public void createTimeFromStringSuccess(String time) {
+        String[] timearr = time.split(",");
+        new TimeType(Integer.parseInt(timearr[0]),Integer.parseInt(timearr[1]),Integer.parseInt(timearr[2]),Integer.parseInt(timearr[3]));
     }
 
 
@@ -29,16 +27,14 @@ public class TimeTypeTest {
      **/
     @ParameterizedTest
     @ValueSource(strings = {
-            "15",
-            "555:55",
-            "abc",
-            "drölf"
+            "154,145,164,114"
     })
-    public void createTimeFromStringFail(int startHours, int startMins, int endHours, int endMins) {
+    public void createTimeFromStringFail(String time) {
+        String[] timearr = time.split(",");
         Assertions.assertThrows(
                 InvalidTimeException.class,
-                () ->  new TimeType(startHours, startMins, endHours, endMins),
-                "'" + startHours + ":"+startMins +"- "+ endHours +":" +endMins + "' is no valid time!"
+                () ->  new TimeType(Integer.parseInt(timearr[0]),Integer.parseInt(timearr[1]),Integer.parseInt(timearr[2]),Integer.parseInt(timearr[3])),
+                "'" + Integer.parseInt(timearr[0]) + ":"+Integer.parseInt(timearr[1]) +"- "+ Integer.parseInt(timearr[2]) +":" +Integer.parseInt(timearr[3]) + "' is no valid time!"
         );
     }
 }

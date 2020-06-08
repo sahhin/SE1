@@ -31,10 +31,10 @@ public class Neighborhood {
     @Column(name = "neighborhoodCountry")
     private String _neighborhoodCountry;
 
-    @OneToMany(mappedBy = "_neighborhood", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "_neighborhood", cascade = CascadeType.ALL)
     private List<User> _user;
 
-    @OneToMany(mappedBy = "_neighborhood", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "_neighborhood", cascade = CascadeType.ALL)
     private List<Event> _event;
 
 
@@ -94,6 +94,9 @@ public class Neighborhood {
         return _neighborhoodId;
     }
 
+    public List<Event> getEvents(){
+        return this._event;
+    }
 
     /**
      * Get the neighborhood's name.

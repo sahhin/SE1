@@ -51,6 +51,7 @@ public class Webserver {
   private void defineRoutes() {
     new EventController(_server);
     new UserController(_server);
+    new NeighborhoodController(_server);
     _server.get("/", new VueComponent("<home-comp></home-comp>"));
     _server.get("/customers", new VueComponent("<customers-comp></customers-comp>"));
     _server.get("/orders", new VueComponent("<orders-comp></orders-comp>"));

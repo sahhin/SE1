@@ -78,6 +78,7 @@ public class NeighborhoodRepository {
         var session = H2Database.getInstance().getSession();
         var neighborhood = session.get(Neighborhood.class, neighborhoodId);
         var transaction = session.beginTransaction();
+
         session.delete(neighborhood);
         transaction.commit();
     }

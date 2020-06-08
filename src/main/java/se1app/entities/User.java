@@ -37,7 +37,7 @@ public class User {
     @AttributeOverride(name = "_adress", column = @Column(name = "userAdress"))
     private AdressType _userAdress;
 
-    @OneToMany(mappedBy = "_user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "_user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> _events;
 
     @ManyToOne(cascade = CascadeType.ALL)

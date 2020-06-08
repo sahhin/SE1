@@ -41,10 +41,13 @@ public class EventRepositoryTest {
   /** Create three entries. */
   private static void createTestEvents() {
     Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
+    Neighborhood neighborhood2 = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
+    Neighborhood neighborhood3 = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
     User user = new User(new Date(80,1,1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
+    User user1 = new User(new Date(80,1,1), "Tesadsadst", "Haasdsadllo", "test@test.de", "Teststraße 5", neighborhood);
     EventRepository.createEvent(user, "Waddup", new Date(11,11,4), new TimeType(15,25,17,30), EventStatus.EVENT_PLANNED, neighborhood);
-    EventRepository.createEvent(user, "Hey", new Date(11,11,4), new TimeType(15,30,17,30), EventStatus.EVENT_PLANNED, neighborhood);
-    EventRepository.createEvent(user, "Yo", new Date(11,11,4), new TimeType(15,30,17,30), EventStatus.EVENT_PLANNED, neighborhood);
+    EventRepository.createEvent(user, "Hey", new Date(11,11,4), new TimeType(15,30,17,30), EventStatus.EVENT_PLANNED, neighborhood2);
+    EventRepository.createEvent(user1, "Yo", new Date(11,11,4), new TimeType(15,30,17,30), EventStatus.EVENT_PLANNED, neighborhood3);
 
   }
 

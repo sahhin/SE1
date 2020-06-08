@@ -38,13 +38,13 @@ public class Event {
     @Column(name = "eventStatusId")
     private EventStatus _eventStatusId;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private User _user;
+    public User _user;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "neighborhood_id")
-    private Neighborhood _neighborhood;
+    public Neighborhood _neighborhood;
 
 
     /**
@@ -62,6 +62,9 @@ public class Event {
         _neighborhood = neighborhood;
     }
 
+    public void setN(Neighborhood n){
+        this._neighborhood=null;
+    }
 
     /**
      * Empty constructor for Hibernate.
@@ -69,11 +72,25 @@ public class Event {
     Event() {
     }
 
-    /** get the Event identifier.
+    /**
+     * get the Event identifier.
+     *
      * @return the id of the Event
      */
     public int getEventId() {
         return _id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null ) {
+            return false;
+        }
+        if (!(o instanceof Event)){
+            return false;
+        }
+        Event object = (Event) o;
+        return this.getEventId() == object.getEventId();
     }
 
 
@@ -88,6 +105,7 @@ public class Event {
 
     /**
      * get the Date of the Event
+     *
      * @return the Event Date
      */
     public Date getEventDate() {
@@ -96,14 +114,20 @@ public class Event {
 
     /**
      * get the Stard-End Time of the Event
+     *
      * @return The Time
      */
     public TimeType getEventTime() {
         return _eventTime;
     }
 
+    public int get_neighborhood_id(){
+        return this._neighborhood.getNeighborhoodId();
+    }
+
     /**
      * get the Status of the Event
+     *
      * @return the Status of the Event
      */
 
@@ -116,6 +140,7 @@ public class Event {
 
     /**
      * set a new Name of the Event
+     *
      * @param eventName the new Name
      */
 
@@ -125,6 +150,7 @@ public class Event {
 
     /**
      * set a new Date of the Event
+     *
      * @param eventDate the new Date
      */
 
@@ -135,6 +161,7 @@ public class Event {
 
     /**
      * set a new Time of the Event
+     *
      * @param eventTime the new Time
      */
     public void setEventTime(TimeType eventTime) {
@@ -143,6 +170,7 @@ public class Event {
 
     /**
      * invite a users to the event
+     *
      * @param user the users
      */
     public void inviteUsers(User user) {
@@ -151,6 +179,7 @@ public class Event {
 
     /**
      * set a new status of the Event
+     *
      * @param eventStatusId the new Status
      */
     public void setEventStatusId(EventStatus eventStatusId) {
@@ -159,6 +188,7 @@ public class Event {
 
     /**
      * get the organizer user of the Event
+     *
      * @return
      */
     public User getUser() {

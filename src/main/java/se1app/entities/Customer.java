@@ -30,6 +30,7 @@ public class Customer {
   private List<Order> _orders;
 
 
+
   /** Create a new customer.
    * @param firstName Customer first name.
    * @param lastName Customer last name.

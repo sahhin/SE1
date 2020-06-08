@@ -73,6 +73,7 @@ public class UserRepository {
     var session = H2Database.getInstance().getSession();
     var user = session.get(User.class, userId);
     var transaction = session.beginTransaction();
+    session.delete(user.getNeighborhood());
     session.delete(user);
     transaction.commit();
   }

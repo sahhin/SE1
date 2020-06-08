@@ -82,7 +82,10 @@ public class EventRepository {
         var session = H2Database.getInstance().getSession();
         var event = session.get(Event.class, eventId);
         var transaction = session.beginTransaction();
+        event._neighborhood = null;
+        event._user = null;
         session.delete(event);
+
         transaction.commit();
     }
 }
