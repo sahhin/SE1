@@ -11,7 +11,7 @@ import java.util.Date;
 
 
 /**
- * Representation of a user.
+ * Representation of a User.
  */
 @Entity
 @Table(name = "user")
@@ -37,7 +37,7 @@ public class User {
     @AttributeOverride(name = "_adress", column = @Column(name = "userAdress"))
     private AdressType _userAdress;
 
-    @OneToMany(mappedBy = "_user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "_user", cascade = CascadeType.ALL)
     private List<Event> _events;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -47,9 +47,11 @@ public class User {
     /**
      * Create a new user.
      *
-     * @param firstName user first name.
-     * @param lastName  user last name.
-     * @param userEmail E-mail address of the user.
+     * @param firstName    user first name.
+     * @param lastName     user last name.
+     * @param userEmail    E-mail address of the user.
+     * @param userAdress   adress of the user.
+     * @param neighborhood neighborhood of the user, in which he has registered
      * @@hrows InvalidEmailException Thrown if input is no valid e-mail.
      */
     public User(Date userBirthday, String firstName, String lastName, String userEmail, String userAdress, Neighborhood neighborhood) throws InvalidEmailException {
@@ -62,7 +64,9 @@ public class User {
         _events = new ArrayList<Event>();
     }
 
-
+    /**
+     * Empty constructor for Hibernate.
+     */
     User() {
     }
 
@@ -116,7 +120,7 @@ public class User {
 
 
     /**
-     * Set a new first name.
+     * Set a new Birthday name.
      *
      * @param newBirthday The new first name.
      */
@@ -163,14 +167,19 @@ public class User {
         _userAdress = newAddress;
     }
 
+    /**
+     * @return the list of Events of a user
+     */
     public List<Event> getEvents() {
         return _events;
     }
 
+    /**
+     * @return neighborhood of the user, in which he has registered
+     */
     public Neighborhood getNeighborhood() {
         return _neighborhood;
     }
 
-    ;
 
 }

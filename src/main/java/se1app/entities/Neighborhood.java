@@ -31,19 +31,19 @@ public class Neighborhood {
     @Column(name = "neighborhoodCountry")
     private String _neighborhoodCountry;
 
-//    @Column(name = "neighborhoodMemberId")
-//    private List<Integer> _neighborhoodMemberId;
-
     @OneToMany(mappedBy = "_neighborhood", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<User> _user;
 
-    @OneToMany(mappedBy = "_neighborhood",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "_neighborhood", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Event> _event;
 
 
     /**
      * Create a new neighborhood.
-     *
+     * @param neighborhoodName name of the neigborhood
+     * @param neighborhoodPostalcode postal code of the neigborhood
+     * @param neighborhoodCity city of the neigborhood
+     * @param neighborhoodCountry country of the neighborhood
      * @throws InvalidEmailException Thrown if input is no valid e-mail.
      */
     public Neighborhood(String neighborhoodName, int neighborhoodPostalcode, String neighborhoodCity, String neighborhoodCountry) {
@@ -51,7 +51,6 @@ public class Neighborhood {
         _neighborhoodPostalcode = neighborhoodPostalcode;
         _neighborhoodCity = neighborhoodCity;
         _neighborhoodCountry = neighborhoodCountry;
-//        _neighborhoodMemberId = new ArrayList<Integer>();
         _user = new ArrayList<User>();
         _event = new ArrayList<Event>();
 
@@ -97,53 +96,65 @@ public class Neighborhood {
 
 
     /**
-     * Get the neighborhood's first name.
+     * Get the neighborhood's name.
      *
-     * @return First name of the neighborhood.
+     * @return name of the neighborhood.
      */
     public String getNeighborhoodName() {
         return _neighborhoodName;
     }
 
-
-//    /**
-//     * Get all oders of this neighborhood.
-//     *
-//     * @return List of orders.
-//     */
-//    public List<Integer> getNeighborhoodMembers() {
-//        return _neighborhoodMemberId;
-//    }
-
+    /**
+     *
+     * @return postal code of the neighborhood
+     */
     public int getNeighborhoodPostalcode() {
         return _neighborhoodPostalcode;
     }
+
+    /**
+     *
+     * @return country of the neighborhood
+     */
 
     public String getNeighborhoodCountry() {
         return _neighborhoodCountry;
     }
 
+    /**
+     *
+     * @return city of the neigborhood
+     */
+
     public String getNeighborhoodCity() {
         return _neighborhoodCity;
     }
 
-//setter
-
-//    public void setNeighborhoodMembers(List<Integer> neighborhoodMemberId) {
-//        _neighborhoodMemberId.addAll(neighborhoodMemberId);
-//    }
-
+    /** set a new postal code
+     *
+     * @param neighborhoodPostalcode the new postal code
+     */
     public void setNeighborhoodPostalcode(int neighborhoodPostalcode) {
         this._neighborhoodPostalcode = neighborhoodPostalcode;
     }
 
+    /** set a new City
+     * @param neighborhoodCity the new City
+     */
     public void setNeighborhoodCity(String neighborhoodCity) {
         this._neighborhoodCity = neighborhoodCity;
     }
 
+    /** set a new Country
+     * @param neighborhoodCountry the new Country
+     */
     public void setNeighborhoodCountry(String neighborhoodCountry) {
         this._neighborhoodCountry = neighborhoodCountry;
     }
+
+    /** set a new Name
+     * @param neighborhoodName the new Name
+     */
     public void setNeighborhoodName(String neighborhoodName) {
         this._neighborhoodName = neighborhoodName;
     }

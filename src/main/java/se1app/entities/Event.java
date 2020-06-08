@@ -4,6 +4,7 @@ import se1app.datatypes.EventStatus;
 import se1app.datatypes.TimeType;
 import se1app.exceptions.InvalidEmailException;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
@@ -55,7 +56,7 @@ public class Event {
         _eventName = eventName;
         _eventDate = eventDate;
         _eventTime = eventTime;
-//        _eventParticipantId = new ArrayList<>();
+        _eventUser = new ArrayList<>();
         _eventStatusId = eventStatusId;
         _user = user;
         _neighborhood = neighborhood;
@@ -68,9 +69,8 @@ public class Event {
     Event() {
     }
 
-    /**
-     *
-     * @return
+    /** get the Event identifier.
+     * @return the id of the Event
      */
     public int getEventId() {
         return _id;
@@ -78,21 +78,34 @@ public class Event {
 
 
     /**
-     * Get the neighborhood's first name.
+     * Get the Event's name.
      *
-     * @return First name of the neighborhood.
+     * @return name of the Event.
      */
     public String getEventName() {
         return _eventName;
     }
 
+    /**
+     * get the Date of the Event
+     * @return the Event Date
+     */
     public Date getEventDate() {
         return _eventDate;
     }
 
+    /**
+     * get the Stard-End Time of the Event
+     * @return The Time
+     */
     public TimeType getEventTime() {
         return _eventTime;
     }
+
+    /**
+     * get the Status of the Event
+     * @return the Status of the Event
+     */
 
     public EventStatus getEventStatusId() {
         return _eventStatusId;
@@ -101,27 +114,53 @@ public class Event {
 
 //setter
 
+    /**
+     * set a new Name of the Event
+     * @param eventName the new Name
+     */
+
     public void setEventName(String eventName) {
         this._eventName = eventName;
     }
+
+    /**
+     * set a new Date of the Event
+     * @param eventDate the new Date
+     */
 
     public void setEventDate(Date eventDate) {
         this._eventDate = eventDate;
     }
 
 
+    /**
+     * set a new Time of the Event
+     * @param eventTime the new Time
+     */
     public void setEventTime(TimeType eventTime) {
         this._eventTime = eventTime;
     }
 
+    /**
+     * invite a users to the event
+     * @param user the users
+     */
     public void inviteUsers(User user) {
         this._eventUser.add(user);
     }
 
+    /**
+     * set a new status of the Event
+     * @param eventStatusId the new Status
+     */
     public void setEventStatusId(EventStatus eventStatusId) {
         this._eventStatusId = eventStatusId;
     }
 
+    /**
+     * get the organizer user of the Event
+     * @return
+     */
     public User getUser() {
         return _user;
     }

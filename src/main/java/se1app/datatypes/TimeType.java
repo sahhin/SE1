@@ -5,7 +5,7 @@ import se1app.exceptions.InvalidTimeException;
 import javax.persistence.Embeddable;
 
 
-/** Data type for a time compliant. */
+/** Datatyp für Time Abbildung. */
 @Embeddable
 public class TimeType {
 
