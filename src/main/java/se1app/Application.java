@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 
+import se1app.datatypes.DateTyp;
 import se1app.entities.*;
 import se1app.facade.Webserver;
 import se1app.persistency.*;
@@ -13,83 +14,95 @@ import se1app.repositories.NeighborhoodRepository;
 import se1app.repositories.UserRepository;
 
 
-/** Main class of our application, containing the entry point and setup. */
+/**
+ * Main class of our application, containing the entry point and setup.
+ */
 public class Application {
 
-  private H2Database _dbServer;  // Database server (h2 and Hibernate).
-  private Webserver _webServer;  // Web server (Javalin framework).
+    private H2Database _dbServer;  // Database server (h2 and Hibernate).
+    private Webserver _webServer;  // Web server (Javalin framework).
 
 
-  /** Create the application. */
-  public Application() {
-    _dbServer = H2Database.getInstance();
-    _webServer = new Webserver(7000, "src/main/resources/webroot");
-  }
-
-
-  /** Start the web server and listen for client connections.
-   * This a blocking call, running until shutdown is signaled. */
-  public void enterListeningMode() {
-    _webServer.start();
-  }
-
-
-  /** Stop the application. This kills all server processes. */
-  public void stop() {
-    _dbServer.stop();
-    _webServer.stop();
-  }
-
-
-  /** Fill an empty database with some test data. */
-  public void insertTestData() {
-    Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
-    User user = new User(new Date(80,1,1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
-    Event events = new Event(user,"SE", new Date(2020, 1, 1), "15:00", "16:00", 12, 1,neighborhood);
-    UserRepository.createUser(new Date(96, 1, 14), "Horst", "Müller", "thehorst_64@gmail.com", "Berliner Tor 7", neighborhood, events);
-
-    EventRepository.createEvent(user, "Waddup", new Date(11,11,11),"11:11", "11:12", 12, 0, neighborhood);
-
-    NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
-  }
-
-
-
-
-  // --------------------------------------------------------------------------
-
-  /** Program main entry point.
-   * @param args Command line arguments. Not used here! */
-  public static void main(String[] args) {
-
-    // Configure the database connection.
-    H2Database.configure(new DatabaseConfig() {{
-      dbName = "./neighborino";
-      annotatedClasses = Arrays.asList(User.class, Neighborhood.class, Event.class);
-      startWebserver = true;
-      showSqlQueries = true;
-    }});
-
-
-    // Create application.
-    var application = new Application();
-
-    // Register shutdown hook.
-    Runtime.getRuntime().addShutdownHook(new Thread(application::stop));
-
-    // If this is an empty database, populate tables with test data.
-    if (UserRepository.getAllUsers().size() == 0) {
-      System.out.println("Empty database found! Filling it with test data!");
-      application.insertTestData();
+    /**
+     * Create the application.
+     */
+    public Application() {
+        _dbServer = H2Database.getInstance();
+        _webServer = new Webserver(7000, "src/main/resources/webroot");
     }
 
-    // Print all customers to console.
-    UserRepository.printUserTable();
 
-    // All manual setup done up to here.
-    // Start the web server and listen for connections until shutdown is ordered.
-    application.enterListeningMode();
-  }
+    /**
+     * Start the web server and listen for client connections.
+     * This a blocking call, running until shutdown is signaled.
+     */
+    public void enterListeningMode() {
+        _webServer.start();
+    }
+
+
+    /**
+     * Stop the application. This kills all server processes.
+     */
+    public void stop() {
+        _dbServer.stop();
+        _webServer.stop();
+    }
+
+
+    /**
+     * Fill an empty database with some test data.
+     */
+    public void insertTestData() {
+        Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
+        User user = new User(new Date(80, 1, 1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
+        DateTyp date = new DateTyp(2020, 1, 1, 14, 00, 15, 00);
+        Event events = new Event(user, "SE", date, 1, neighborhood);
+        UserRepository.createUser(new Date(96, 1, 14), "Horst", "Müller", "thehorst_64@gmail.com", "Berliner Tor 7", neighborhood, events);
+
+        EventRepository.createEvent(user, "Waddup", new Date(11, 11, 11), "11:11", "11:12", 12, 0, neighborhood);
+
+        NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
+    }
+
+
+    // --------------------------------------------------------------------------
+
+    /**
+     * Program main entry point.
+     *
+     * @param args Command line arguments. Not used here!
+     */
+    public static void main(String[] args) {
+
+        // Configure the database connection.
+        H2Database.configure(new DatabaseConfig() {{
+            dbName = "./neighborino";
+            annotatedClasses = Arrays.asList(User.class, Neighborhood.class, Event.class);
+            startWebserver = true;
+            showSqlQueries = true;
+        }});
+
+
+        // Create application.
+        var application = new Application();
+
+        // Register shutdown hook.
+        Runtime.getRuntime().addShutdownHook(new Thread(application::stop));
+
+        // If this is an empty database, populate tables with test data.
+        if (UserRepository.getAllUsers().size() == 0) {
+            System.out.println("Empty database found! Filling it with test data!");
+            application.insertTestData();
+        }
+
+        // Print all customers to console.
+        UserRepository.printUserTable();
+
+        // All manual setup done up to here.
+        // Start the web server and listen for connections until shutdown is ordered.
+        application.enterListeningMode();
+    }
 }
 
 

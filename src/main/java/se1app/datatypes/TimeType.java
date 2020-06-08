@@ -42,3 +42,4 @@ public class TimeType {
     return time.matches(timeRegex);
   }
 }
+

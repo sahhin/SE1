@@ -1,5 +1,6 @@
 package se1app.entities;
 
+import se1app.datatypes.DateTyp;
 import se1app.exceptions.InvalidEmailException;
 
 import java.util.Date;
@@ -23,16 +24,7 @@ public class Event {
     private String _eventName;
 
     @Column(name = "eventDate")
-    private Date _eventDate;
-
-    @Column(name = "eventStartTime")
-    private String _eventStartTime;
-
-    @Column(name = "eventEndTime")
-    private String _eventEndTime;
-
-    @Column(name = "eventOrganizerId")
-    private int _eventOrganizerId;
+    private DateTyp _eventDate;
 
     @Column(name = "eventParticipantId")
     @ElementCollection
@@ -50,18 +42,14 @@ public class Event {
     private Neighborhood _neighborhood;
 
 
-
     /**
      * Create a new neighborhood.
      *
      * @throws InvalidEmailException Thrown if input is no valid e-mail.
      */
-    public Event(User user, String eventName, Date eventDate, String eventStartTime, String eventEndTime, int eventOrganizerId, int eventStatusId, Neighborhood neighborhood) {
+    public Event(User user, String eventName, DateTyp eventDate, int eventStatusId, Neighborhood neighborhood) {
         _eventName = eventName;
         _eventDate = eventDate;
-        _eventStartTime = eventStartTime;
-        _eventEndTime = eventEndTime;
-        _eventOrganizerId = eventOrganizerId;
 //        _eventParticipantId = new ArrayList<>();
         _eventStatusId = eventStatusId;
         _user = user;
@@ -94,20 +82,8 @@ public class Event {
         return _eventName;
     }
 
-    public Date getEventDate() {
+    public DateTyp getEventDate() {
         return _eventDate;
-    }
-
-    public String getEventStartTime() {
-        return _eventStartTime;
-    }
-
-    public String getEventEndTime() {
-        return _eventEndTime;
-    }
-
-    public int getEventOrganizerId() {
-        return _eventOrganizerId;
     }
 
 //    public List<Integer> getEventParticipantId() {
@@ -125,20 +101,8 @@ public class Event {
         this._eventName = eventName;
     }
 
-    public void setEventDate(Date eventDate) {
+    public void setEventDate(DateTyp eventDate) {
         this._eventDate = eventDate;
-    }
-
-    public void setEventStartTime(String eventStartTime) {
-        this._eventStartTime = eventStartTime;
-    }
-
-    public void setEventEndTime(String eventEndTime) {
-        this._eventEndTime = eventEndTime;
-    }
-
-    public void setEventOrganizerId(int eventOrganizerId) {
-        this._eventOrganizerId = eventOrganizerId;
     }
 
     public void inviteUsers(User user) {
