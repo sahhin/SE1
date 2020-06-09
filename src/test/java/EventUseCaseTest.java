@@ -6,13 +6,10 @@ import se1app.datatypes.TimeType;
 import se1app.entities.*;
 import se1app.persistency.DatabaseConfig;
 import se1app.persistency.H2Database;
-import se1app.repositories.CustomerRepository;
 import se1app.repositories.EventRepository;
 import se1app.repositories.UserRepository;
 import se1app.usecases.EventUseCase;
-import se1app.usecases.OrderUseCase;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
