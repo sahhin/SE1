@@ -42,7 +42,7 @@ public class User {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "neighborhood_id", updatable = false, insertable = false)
-    private Neighborhood _neighborhood;
+    public Neighborhood _neighborhood;
 
     /**
      * Create a new user.
