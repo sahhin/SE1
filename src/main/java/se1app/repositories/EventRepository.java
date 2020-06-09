@@ -57,8 +57,7 @@ public class EventRepository {
      */
     public static List<Event> getAllEvents() {
         var session = H2Database.getInstance().getSession();
-        var event = session.createQuery("FROM Event", Event.class).getResultList();
-        return event;
+        return session.createQuery("FROM Event", Event.class).getResultList();
     }
 
 

@@ -19,7 +19,7 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", updatable = false, insertable = false)
     private int _id;
 
     @Column(name = "eventName")
@@ -39,11 +39,11 @@ public class Event {
     private EventStatus _eventStatusId;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", updatable = false, insertable = false)
     public User _user;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "neighborhood_id")
+    @JoinColumn(name = "neighborhood_id", updatable = false, insertable = false)
     public Neighborhood _neighborhood;
 
 
@@ -62,9 +62,6 @@ public class Event {
         _neighborhood = neighborhood;
     }
 
-    public void setN(Neighborhood n){
-        this._neighborhood=null;
-    }
 
     /**
      * Empty constructor for Hibernate.
@@ -121,9 +118,6 @@ public class Event {
         return _eventTime;
     }
 
-    public int get_neighborhood_id(){
-        return this._neighborhood.getNeighborhoodId();
-    }
 
     /**
      * get the Status of the Event

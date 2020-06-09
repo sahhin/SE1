@@ -16,7 +16,7 @@ public class Neighborhood {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "neighborhoodId")
+    @Column(name = "neighborhoodId", updatable = false, insertable = false)
     private int _neighborhoodId;
 
     @Column(name = "neighborhoodName")

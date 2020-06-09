@@ -13,6 +13,7 @@ import se1app.entities.Neighborhood;
 import se1app.exceptions.InvalidEmailException;
 import se1app.repositories.UserRepository;
 import se1app.entities.User;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -81,22 +82,21 @@ public class UserController {
      */
     private static void createUser(Context ctx) throws IOException {
         try {
-            var jsonNode = new ObjectMapper().readTree(ctx.body());
+            var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
-            User user = new User(new Date(80,1,1), "Test", "Hallo", "test@test.de", "Teststr. 15", neighborhood);
-            Event events = new Event(user, "Test", new Date(2020, 1, 1), new TimeType(15,15,16,16), EventStatus.EVENT_PLANNED,neighborhood);
+
             var savedUser = UserRepository.createUser(
-                    sdf.parse(jsonNode.get("userBirthday").toString()),
+//                    sdf.parse(jsonNode.get("userBirthday").toString()),
+                    new Date(),
                     jsonNode.get("firstName").asText(),
                     jsonNode.get("lastName").asText(),
-                    jsonNode.get("emailAddress").get("userEmail").asText(),
-                    jsonNode.get("address").get("userAdress").asText(),
-                    neighborhood
+                    jsonNode.get("emailAddress").get("email").asText(),
+                    jsonNode.get("custAdress").get("adress").asText(),
+                    null
             );
             if (savedUser != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
-        } catch (JsonProcessingException | ParseException ex) {
+        } catch (JsonProcessingException ex) {
             var msg = "JSON parser exception: " + ex;
             System.err.println("[UserController] createUser: " + msg);
             ctx.res.sendError(400, msg);
@@ -114,7 +114,7 @@ public class UserController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (user != null) {
             try {
-                var jsonNode = new ObjectMapper().readTree(ctx.body());
+                var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
                 if (jsonNode.get("userBirthday") != null) {
                     user.setBirthday(sdf.parse(jsonNode.get("userBirthday").toString()));
                 }
@@ -125,12 +125,12 @@ public class UserController {
                     user.setLastName(jsonNode.get("lastName").asText());
                 }
                 if (jsonNode.get("emailAddress") != null) {
-                    var emailStr = jsonNode.get("emailAddress").get("userEmail").asText();
+                    var emailStr = jsonNode.get("emailAddress").get("email").asText();
                     var newEmailAddress = new EmailType(emailStr);
                     user.setEmailAddress(newEmailAddress);
                 }
-                if (jsonNode.get("address") != null) {
-                    var adressStr = jsonNode.get("address").get("userAdress").asText();
+                if (jsonNode.get("custAdress") != null) {
+                    var adressStr = jsonNode.get("custAdress").get("adress").asText();
                     var newAddress = new AdressType(adressStr);
                     user.setAddress(newAddress);
                 }

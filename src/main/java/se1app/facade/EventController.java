@@ -80,27 +80,30 @@ public class EventController {
      */
     private static void createEvent(Context ctx) throws IOException {
         try {
-            var jsonNode = new ObjectMapper().readTree(ctx.body());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
-            User user = new User(new Date(80, 1, 1), "Test", "Hallo", "test@test.de", "Teststr.", neighborhood);
-            Event events = new Event(user, "Test", new Date(2020, 1, 1), new TimeType(15, 00, 16, 00), EventStatus.EVENT_PLANNED, neighborhood);
+            var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+            System.out.println(jsonNode.get("eventTime").asText());
+            String[] times = jsonNode.get("eventTime").get("time").asText().split("-");
+            int startHours = Integer.parseInt(times[0].substring(0, times[0].indexOf(':')));
+            int startMins = Integer.parseInt(times[0].substring(times[0].indexOf(':')+1).strip());
+            int endHours = Integer.parseInt(times[1].substring(0, times[1].indexOf(':')).strip());
+            int endMins = Integer.parseInt(times[1].substring(times[1].indexOf(':')+1));
             var savedEvent = EventRepository.createEvent(
-                    user,
+                    null,
                     jsonNode.get("eventName").asText(),
-                    sdf.parse(jsonNode.get("eventDate").toString()),
+                    new Date(),
                     new TimeType(
-                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(0, jsonNode.get("eventTime").asText().charAt(':'))),
-                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(jsonNode.get("eventTime").asText().charAt(':'), jsonNode.get("eventTime").asText().charAt(' '))),
-                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(jsonNode.get("eventTime").asText().charAt('-') + 1), jsonNode.get("eventTime").asText().charAt(':')),
-                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(jsonNode.get("eventTime").asText().charAt(':')))
+                            startHours,
+                            startMins,
+                            endHours,
+                            endMins
                     ),
                     EventStatus.valueOf(jsonNode.get("eventStatusId").asText()),
-                    neighborhood
+                    null
             );
             if (savedEvent != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
-        } catch (JsonProcessingException | ParseException ex) {
+        } catch (JsonProcessingException ex) {
             var msg = "JSON parser exception: " + ex;
             System.err.println("[EventController] createEvent: " + msg);
             ctx.res.sendError(400, msg);
@@ -118,7 +121,7 @@ public class EventController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (event != null) {
             try {
-                var jsonNode = new ObjectMapper().readTree(ctx.body());
+                var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
                 if (jsonNode.get("eventDate") != null) {
                     event.setEventDate(sdf.parse(jsonNode.get("eventDate").toString()));
                 }

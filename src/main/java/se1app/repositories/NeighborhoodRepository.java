@@ -53,8 +53,7 @@ public class NeighborhoodRepository {
      */
     public static List<Neighborhood> getAllNeighborhoods() {
         var session = H2Database.getInstance().getSession();
-        var neighborhood = session.createQuery("FROM Neighborhood", Neighborhood.class).getResultList();
-        return neighborhood;
+        return session.createQuery("FROM Neighborhood", Neighborhood.class).getResultList();
     }
 
 

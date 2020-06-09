@@ -25,11 +25,11 @@ public class NeighborhoodController {
      * @param server Javalin server handle to register REST endpoints.
      */
     public NeighborhoodController(Javalin server) {
-        server.get("/api/neighborhood", NeighborhoodController::getAllNeighborhood);
-        server.get("/api/neighborhood/:neighborhood-id", NeighborhoodController::getNeighborhoodById);
-        server.delete("/api/neighborhood/:neighborhood-id", NeighborhoodController::deleteNeighborhoodById);
-        server.post("/api/neighborhood", NeighborhoodController::createNeighborhood);
-        server.put("/api/neighborhood/:neighborhood-id", NeighborhoodController::updateNeighborhood);
+        server.get("/api/neighborhoods", NeighborhoodController::getAllNeighborhood);
+        server.get("/api/neighborhoods/:neighborhood-id", NeighborhoodController::getNeighborhoodById);
+        server.delete("/api/neighborhoods/:neighborhood-id", NeighborhoodController::deleteNeighborhoodById);
+        server.post("/api/neighborhoods", NeighborhoodController::createNeighborhood);
+        server.put("/api/neighborhoods/:neighborhood-id", NeighborhoodController::updateNeighborhood);
     }
 
 
@@ -75,16 +75,14 @@ public class NeighborhoodController {
      */
     private static void createNeighborhood(Context ctx) throws IOException {
         try {
-            var jsonNode = new ObjectMapper().readTree(ctx.body());
-            Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
-            User user = new User(new Date(80, 1, 1), "Test", "Hallo", "test@test.de", "Teststr.", neighborhood);
+            var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
             var savedNeighborhood = NeighborhoodRepository.createNeighborhood(
                     jsonNode.get("neighborhoodName").asText(),
                     jsonNode.get("neighborhoodPostalcode").asInt(),
                     jsonNode.get("neighborhoodCity").asText(),
                     jsonNode.get("neighborhoodCountry").asText()
-
             );
+            System.out.println(savedNeighborhood);
             if (savedNeighborhood != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
         } catch (JsonProcessingException ex) {
@@ -102,9 +100,9 @@ public class NeighborhoodController {
      */
     private static void updateNeighborhood(Context ctx) throws IOException {
         var neighborhood = fetchNeighborhood(ctx, "updateNeighborhood");
+        var jsonNode = new ObjectMapper().readTree(ctx.body());
         if (neighborhood != null) {
             try {
-                var jsonNode = new ObjectMapper().readTree(ctx.body());
                 if (jsonNode.get("neighborhoodName") != null) {
                     neighborhood.setNeighborhoodName(jsonNode.get("neighborhoodName").asText());
                 }
@@ -117,14 +115,14 @@ public class NeighborhoodController {
                 if (jsonNode.get("neighborhoodCountry") != null) {
                     neighborhood.setNeighborhoodCountry(jsonNode.get("neighborhoodCountry").asText());
                 }
-
                 NeighborhoodRepository.saveNeighborhood(neighborhood);
                 ctx.res.setStatus(200);
-            } catch (JsonProcessingException | InvalidEmailException ex) {
+            } catch (InvalidEmailException ex) {
                 System.err.println("[neighborhood] updateNeighborhood: " + ex);
                 ctx.res.sendError(400, ex.toString());
             }
         }
+        
     }
 
 
@@ -144,7 +142,8 @@ public class NeighborhoodController {
                 if (neighborhood != null) return neighborhood;
                 else {
                     var msg = "Neighborhood #" + neighborhoodId + " not found!";
-                    if (endpointDesc != null) System.err.println("[NeighborhoodController] " + endpointDesc + ": " + msg);
+                    if (endpointDesc != null)
+                        System.err.println("[NeighborhoodController] " + endpointDesc + ": " + msg);
                     ctx.res.sendError(404, msg);
                 }
             } catch (NumberFormatException ex) {

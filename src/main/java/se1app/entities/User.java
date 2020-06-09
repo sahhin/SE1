@@ -19,7 +19,7 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", updatable = false, insertable = false)
     private int _id;
 
     @Column(name = "userFirstName")
@@ -41,7 +41,7 @@ public class User {
     private List<Event> _events;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "neighborhood_id")
+    @JoinColumn(name = "neighborhood_id", updatable = false, insertable = false)
     private Neighborhood _neighborhood;
 
     /**
