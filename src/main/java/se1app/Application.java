@@ -55,14 +55,9 @@ public class Application {
      * Fill an empty database with some test data.
      */
     public void insertTestData() {
-        Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
-        User user = new User(new Date(80, 1, 1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
-        Event events = new Event(user, "SE",new Date(80, 1, 1), new TimeType(15,15,16,16), EventStatus.EVENT_PLANNED, neighborhood);
-        UserRepository.createUser(new Date(96, 1, 14), "Horst", "Müller", "thehorst_64@gmail.com", "Berliner Tor 7", neighborhood);
-
+        Neighborhood neighborhood = NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
+        User user = UserRepository.createUser(new Date(80, 1, 1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
         EventRepository.createEvent(user, "Waddup", new Date(11, 11, 11), new TimeType(15,15,16,16), EventStatus.EVENT_RELEASED, neighborhood);
-
-        NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
     }
 
 
