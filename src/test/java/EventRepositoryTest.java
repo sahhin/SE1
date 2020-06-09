@@ -7,6 +7,8 @@ import se1app.entities.*;
 import se1app.persistency.DatabaseConfig;
 import se1app.persistency.H2Database;
 import se1app.repositories.EventRepository;
+import se1app.repositories.NeighborhoodRepository;
+import se1app.repositories.UserRepository;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -40,11 +42,11 @@ public class EventRepositoryTest {
 
   /** Create three entries. */
   private static void createTestEvents() {
-    Neighborhood neighborhood = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
-    Neighborhood neighborhood2 = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
-    Neighborhood neighborhood3 = new Neighborhood("Altona", 22769, "Hamburg", "Deutschland");
-    User user = new User(new Date(80, Calendar.FEBRUARY,1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
-    User user1 = new User(new Date(80, Calendar.FEBRUARY,1), "Tesadsadst", "Haasdsadllo", "test@test.de", "Teststraße 5", neighborhood);
+    Neighborhood neighborhood = NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
+    Neighborhood neighborhood2 = NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
+    Neighborhood neighborhood3 = NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
+    User user = UserRepository.createUser(new Date(80, Calendar.FEBRUARY,1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
+    User user1 = UserRepository.createUser(new Date(80, Calendar.FEBRUARY,1), "Tesadsadst", "Haasdsadllo", "test@test.de", "Teststraße 5", neighborhood);
     EventRepository.createEvent(user, "Waddup", new Date(11,11,4), new TimeType(15,25,17,30), EventStatus.EVENT_PLANNED, neighborhood);
     EventRepository.createEvent(user, "Hey", new Date(11,11,4), new TimeType(15,30,17,30), EventStatus.EVENT_PLANNED, neighborhood2);
     EventRepository.createEvent(user1, "Yo", new Date(11,11,4), new TimeType(15,30,17,30), EventStatus.EVENT_PLANNED, neighborhood3);

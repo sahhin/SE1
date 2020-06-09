@@ -38,11 +38,11 @@ public class Event {
     @Column(name = "eventStatusId")
     private EventStatus _eventStatusId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id", updatable = false, insertable = false)
     public User _user;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "neighborhood_id", updatable = false, insertable = false)
     public Neighborhood _neighborhood;
 

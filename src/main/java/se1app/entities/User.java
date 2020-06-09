@@ -40,7 +40,7 @@ public class User {
     @OneToMany(mappedBy = "_user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> _events;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "neighborhood_id", updatable = false, insertable = false)
     public Neighborhood _neighborhood;
 
