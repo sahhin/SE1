@@ -2,8 +2,8 @@ package se1app;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import se1app.datatypes.EventStatus;
 import se1app.datatypes.TimeType;
@@ -13,6 +13,7 @@ import se1app.persistency.*;
 import se1app.repositories.EventRepository;
 import se1app.repositories.NeighborhoodRepository;
 import se1app.repositories.UserRepository;
+import se1app.usecases.EventUseCase;
 
 
 /**
@@ -55,9 +56,27 @@ public class Application {
      * Fill an empty database with some test data.
      */
     public void insertTestData() {
-        Neighborhood neighborhood = NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
-        User user = UserRepository.createUser(new Date(80, 1, 1), "Test", "Hallo", "test@test.de", "Teststraße 5", neighborhood);
-        EventRepository.createEvent(user, "Waddup", new Date(11, 11, 11), new TimeType(15,15,16,16), EventStatus.EVENT_RELEASED, neighborhood);
+        NeighborhoodRepository.createNeighborhood("Altona2", 22769, "Hamburg", "Deutschland");
+        UserRepository.createUser("Sahin", "Tekes", "stekes@haw.de", "Strasse 5");
+        EventRepository.createEvent("Testevent", new Date(2020, 1, 1), new TimeType(15, 15, 15, 51), EventStatus.EVENT_PLANNED);
+        EventUseCase.setOrganizer(1, 1);
+        EventUseCase.setNeighborhood(1, 1);
+        UserRepository.getUserById(1).setNeighborhood(NeighborhoodRepository.getNeighborhoodById(1));
+
+        UserRepository.createUser("Frank", "Rosin", "tomatenundschalotten@weisswein.de", "Rosinstraße 5");
+        UserRepository.createUser("Homer", "Simpson", "hsimpson@sector7g.de", "Evergreen Terrace 742");
+        UserRepository.createUser("Gordon", "Shumway", "alf@melmac.de", "Melmac 20215487");
+
+        UserRepository.getUserById(2).setNeighborhood(NeighborhoodRepository.getNeighborhoodById(1));
+        UserRepository.getUserById(3).setNeighborhood(NeighborhoodRepository.getNeighborhoodById(1));
+        UserRepository.getUserById(4).setNeighborhood(NeighborhoodRepository.getNeighborhoodById(1));
+
+        List<User> users = new ArrayList<>();
+        users.add(UserRepository.getUserById(2));
+        users.add(UserRepository.getUserById(3));
+        users.add(UserRepository.getUserById(4));
+        EventUseCase.addParticipants(users, 1);
+
     }
 
 

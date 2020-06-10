@@ -81,15 +81,12 @@ public class EventController {
     private static void createEvent(Context ctx) throws IOException {
         try {
             var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-            System.out.println(jsonNode.get("eventTime").asText());
             String[] times = jsonNode.get("eventTime").get("time").asText().split("-");
             int startHours = Integer.parseInt(times[0].substring(0, times[0].indexOf(':')));
             int startMins = Integer.parseInt(times[0].substring(times[0].indexOf(':')+1).strip());
             int endHours = Integer.parseInt(times[1].substring(0, times[1].indexOf(':')).strip());
             int endMins = Integer.parseInt(times[1].substring(times[1].indexOf(':')+1));
             var savedEvent = EventRepository.createEvent(
-                    null,
                     jsonNode.get("eventName").asText(),
                     new Date(),
                     new TimeType(
@@ -98,8 +95,7 @@ public class EventController {
                             endHours,
                             endMins
                     ),
-                    EventStatus.valueOf(jsonNode.get("eventStatusId").asText()),
-                    null
+                    EventStatus.valueOf(jsonNode.get("eventStatusId").asText())
             );
             if (savedEvent != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error

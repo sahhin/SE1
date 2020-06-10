@@ -1,5 +1,6 @@
 package se1app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import se1app.datatypes.AdressType;
 import se1app.datatypes.EmailType;
 import se1app.exceptions.InvalidEmailException;
@@ -15,11 +16,12 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "user")
+@JsonIgnoreProperties(value = {"neighborhood"})
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, insertable = false)
+    @Column(name = "id")
     private int _id;
 
     @Column(name = "userFirstName")
@@ -28,39 +30,33 @@ public class User {
     @Column(name = "userLastName")
     private String _userLastName;
 
-    @Column(name = "userBirthday")
-    private Date _userBirthday;
-
     @AttributeOverride(name = "_email", column = @Column(name = "userEmail"))
     private EmailType _userEmail;
 
     @AttributeOverride(name = "_adress", column = @Column(name = "userAdress"))
     private AdressType _userAdress;
 
-    @OneToMany(mappedBy = "_user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "_user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Event> _events;
 
     @ManyToOne
-    @JoinColumn(name = "neighborhood_id", updatable = false, insertable = false)
+    @JoinColumn(name = "neighborhood_id")
     public Neighborhood _neighborhood;
 
     /**
      * Create a new user.
      *
-     * @param firstName    user first name.
-     * @param lastName     user last name.
-     * @param userEmail    E-mail address of the user.
-     * @param userAdress   adress of the user.
-     * @param neighborhood neighborhood of the user, in which he has registered
-     * @@hrows InvalidEmailException Thrown if input is no valid e-mail.
+     * @param firstName  user first name.
+     * @param lastName   user last name.
+     * @param userEmail  E-mail address of the user.
+     * @param userAdress adress of the user.
+     * @throws InvalidEmailException Thrown if input is no valid e-mail.
      */
-    public User(Date userBirthday, String firstName, String lastName, String userEmail, String userAdress, Neighborhood neighborhood) throws InvalidEmailException {
+    public User(String firstName, String lastName, String userEmail, String userAdress) throws InvalidEmailException {
         _userFirstName = firstName;
         _userLastName = lastName;
-        _userBirthday = userBirthday;
         _userEmail = new EmailType(userEmail);
         _userAdress = new AdressType(userAdress);
-        _neighborhood = neighborhood;
         _events = new ArrayList<Event>();
     }
 
@@ -79,10 +75,26 @@ public class User {
         return _id;
     }
 
+    /**
+     * set a neighborhood fot the User
+     *
+     * @param neighborhood the neighborhood
+     */
+    public void setNeighborhood(Neighborhood neighborhood) {
+        this._neighborhood = neighborhood;
+    }
+
+    /**
+     * get the neighborhood
+     *
+     * @return neighborhood
+     */
+    public Neighborhood getNeighborhood() {
+        return _neighborhood;
+    }
 
     /**
      * Get the user's first name.
-     *
      * @return First name of the user.
      */
     public String getFirstName() {
@@ -92,7 +104,6 @@ public class User {
 
     /**
      * Get the user's last name.
-     *
      * @return Last name of the user.
      */
     public String getLastName() {
@@ -102,7 +113,6 @@ public class User {
 
     /**
      * Get the user's e-mail address.
-     *
      * @return E-mail address of the user.
      */
     public EmailType getEmailAddress() {
@@ -111,7 +121,6 @@ public class User {
 
     /**
      * Get the user's e-mail address.
-     *
      * @return E-mail address of the user.
      */
     public AdressType getCustAdress() {
@@ -120,18 +129,7 @@ public class User {
 
 
     /**
-     * Set a new Birthday name.
-     *
-     * @param newBirthday The new first name.
-     */
-    public void setBirthday(Date newBirthday) {
-        _userBirthday = newBirthday;
-    }
-
-
-    /**
      * Set a new first name.
-     *
      * @param newFirstName The new first name.
      */
     public void setFirstName(String newFirstName) {
@@ -141,7 +139,6 @@ public class User {
 
     /**
      * Set a new last name.
-     *
      * @param newLastName The new last name.
      */
     public void setLastName(String newLastName) {
@@ -151,7 +148,6 @@ public class User {
 
     /**
      * Set a new e-mail address.
-     *
      * @param newEmailAddress The new e-mail address.
      */
     public void setEmailAddress(EmailType newEmailAddress) {
@@ -160,26 +156,10 @@ public class User {
 
     /**
      * Set a new e-mail address.
-     *
      * @param newAddress The new e-mail address.
      */
     public void setAddress(AdressType newAddress) {
         _userAdress = newAddress;
     }
-
-    /**
-     * @return the list of Events of a user
-     */
-    public List<Event> getEvents() {
-        return _events;
-    }
-
-    /**
-     * @return neighborhood of the user, in which he has registered
-     */
-    public Neighborhood getNeighborhood() {
-        return _neighborhood;
-    }
-
 
 }

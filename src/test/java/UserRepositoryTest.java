@@ -49,10 +49,9 @@ public class UserRepositoryTest {
      * Create three entries.
      */
     private static void createTestUsers() {
-        Neighborhood neighborhood = NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
-        UserRepository.createUser(new Date(80, 1, 1), "Homer J.", "Simpson", "simpson@sector7g.com", "Evergreen Terrace 742", neighborhood);
-        UserRepository.createUser(new Date(80, 1, 1), "Frank", "Rosin", "f.rosin@kabel1.de", "Rosins Restaurants 5", neighborhood);
-        UserRepository.createUser(new Date(80, 1, 1), "Rick", "Sanchez", "pickle@rick.com", "Dimension C 132", neighborhood);
+        UserRepository.createUser( "Homer J.", "Simpson", "simpson@sector7g.com", "Evergreen Terrace 742");
+        UserRepository.createUser("Frank", "Rosin", "f.rosin@kabel1.de", "Rosins Restaurants 5");
+        UserRepository.createUser("Rick", "Sanchez", "pickle@rick.com", "Dimension C 132");
     }
 
 

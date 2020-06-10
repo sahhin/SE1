@@ -39,8 +39,8 @@ public class NeighborhoodRepositoryTest {
   /** Create three entries. */
   private static void createTestNeighborhoods() {
     NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
-    NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
-    NeighborhoodRepository.createNeighborhood("Altona", 22769, "Hamburg", "Deutschland");
+    NeighborhoodRepository.createNeighborhood("Wandsbek", 20535, "Hamburg", "Deutschland");
+    NeighborhoodRepository.createNeighborhood("Bergedorf", 21029, "Hamburg", "Deutschland");
   }
 
 
@@ -58,7 +58,7 @@ public class NeighborhoodRepositoryTest {
   public void neighborhoodQueryTest() {
     createTestNeighborhoods();
     var neighborhood2 = NeighborhoodRepository.getNeighborhoodById(2);
-    assertEquals("Altona", neighborhood2.getNeighborhoodName());
+    assertEquals("Wandsbek", neighborhood2.getNeighborhoodName());
   }
 
 

@@ -1,8 +1,10 @@
 package se1app.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import se1app.datatypes.EventStatus;
 import se1app.datatypes.TimeType;
 import se1app.exceptions.InvalidEmailException;
+import se1app.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,15 +13,16 @@ import javax.persistence.*;
 
 
 /**
- * Representation of a neighborhood.
+ * Representation of a Event in a Neighborhood.
  */
 @Entity
 @Table(name = "event")
+@JsonIgnoreProperties(value = { "neighborhood" })
 public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false, insertable = false)
+    @Column(name = "id")
     private int _id;
 
     @Column(name = "eventName")
@@ -33,40 +36,48 @@ public class Event {
 
     @Column(name = "eventParticipantId")
     @ElementCollection
-    private List<User> _eventUser;
+    public List<User> _eventUser;
 
     @Column(name = "eventStatusId")
     private EventStatus _eventStatusId;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", updatable = false, insertable = false)
+    @JoinColumn(name = "user_id")
     public User _user;
 
     @ManyToOne
-    @JoinColumn(name = "neighborhood_id", updatable = false, insertable = false)
+    @JoinColumn(name = "neighborhood_id")
     public Neighborhood _neighborhood;
 
 
     /**
      * Create a new neighborhood.
-     *
+     * @param  eventName the Title of the event
+     * @param eventDate the date of the event
+     * @param eventTime the time of the event
+     * @param eventStatusId the status of the event
      * @throws InvalidEmailException Thrown if input is no valid e-mail.
      */
-    public Event(User user, String eventName, Date eventDate, TimeType eventTime, EventStatus eventStatusId, Neighborhood neighborhood) {
+    public Event(String eventName, Date eventDate, TimeType eventTime, EventStatus eventStatusId) {
         _eventName = eventName;
         _eventDate = eventDate;
         _eventTime = eventTime;
         _eventUser = new ArrayList<>();
         _eventStatusId = eventStatusId;
-        _user = user;
-        _neighborhood = neighborhood;
     }
-
 
     /**
      * Empty constructor for Hibernate.
      */
     Event() {
+    }
+
+    /**
+     * set a neighborhood where the event is
+     * @param neighborhood the neighorhood
+     */
+    public void setNeighborhood(Neighborhood neighborhood){
+        this._neighborhood = neighborhood;
     }
 
     /**
@@ -77,19 +88,6 @@ public class Event {
     public int getEventId() {
         return _id;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (o == null ) {
-            return false;
-        }
-        if (!(o instanceof Event)){
-            return false;
-        }
-        Event object = (Event) o;
-        return this.getEventId() == object.getEventId();
-    }
-
 
     /**
      * Get the Event's name.
@@ -167,8 +165,16 @@ public class Event {
      *
      * @param user the users
      */
-    public void inviteUsers(User user) {
-        this._eventUser.add(user);
+    public void setOrganiser(User user) {
+        this._user = user;
+    }
+
+    /**
+     * add users to the event
+     * @param users
+     */
+    public void addUsers(List<User> users){
+        this._eventUser.addAll(users);
     }
 
     /**
@@ -180,13 +186,5 @@ public class Event {
         this._eventStatusId = eventStatusId;
     }
 
-    /**
-     * get the organizer user of the Event
-     *
-     * @return
-     */
-    public User getUser() {
-        return _user;
-    }
 
 }

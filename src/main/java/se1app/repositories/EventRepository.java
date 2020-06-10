@@ -20,17 +20,15 @@ public class EventRepository {
 
     /**
      *
-     * @param user Organiser of event
      * @param eventName Name of event
      * @param eventDate Date of event
      * @param eventTime Start time and end time of event
      * @param eventStatusId Status of event. See EventStatus
-     * @param neighborhood Neighborhood in which event takes place
      * @return Created event or null
      */
-    public static Event createEvent(User user, String eventName, Date eventDate, TimeType eventTime, EventStatus eventStatusId, Neighborhood neighborhood) {
+    public static Event createEvent( String eventName, Date eventDate, TimeType eventTime, EventStatus eventStatusId) {
         try {
-            var event = new Event(user, eventName, eventDate, eventTime, eventStatusId, neighborhood);
+            var event = new Event(eventName, eventDate, eventTime, eventStatusId);
             saveEvent(event);
             return event;
         } catch (InvalidEmailException ex) {

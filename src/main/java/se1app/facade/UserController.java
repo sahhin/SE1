@@ -83,16 +83,11 @@ public class UserController {
     private static void createUser(Context ctx) throws IOException {
         try {
             var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
             var savedUser = UserRepository.createUser(
-//                    sdf.parse(jsonNode.get("userBirthday").toString()),
-                    new Date(),
                     jsonNode.get("firstName").asText(),
                     jsonNode.get("lastName").asText(),
                     jsonNode.get("emailAddress").get("email").asText(),
-                    jsonNode.get("custAdress").get("adress").asText(),
-                    null
+                    jsonNode.get("custAdress").get("adress").asText()
             );
             if (savedUser != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
@@ -111,13 +106,9 @@ public class UserController {
      */
     private static void updateUser(Context ctx) throws IOException {
         var user = fetchUser(ctx, "updateUser");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (user != null) {
             try {
                 var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
-                if (jsonNode.get("userBirthday") != null) {
-                    user.setBirthday(sdf.parse(jsonNode.get("userBirthday").toString()));
-                }
                 if (jsonNode.get("firstName") != null) {
                     user.setFirstName(jsonNode.get("firstName").asText());
                 }
@@ -136,7 +127,7 @@ public class UserController {
                 }
                 UserRepository.saveUser(user);
                 ctx.res.setStatus(200);
-            } catch (JsonProcessingException | InvalidEmailException | ParseException ex) {
+            } catch (JsonProcessingException | InvalidEmailException ex) {
                 System.err.println("[UserController] updateUser: " + ex);
                 ctx.res.sendError(400, ex.toString());
             }
