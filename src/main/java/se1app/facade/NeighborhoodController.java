@@ -100,7 +100,7 @@ public class NeighborhoodController {
      */
     private static void updateNeighborhood(Context ctx) throws IOException {
         var neighborhood = fetchNeighborhood(ctx, "updateNeighborhood");
-        var jsonNode = new ObjectMapper().readTree(ctx.body());
+        var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
         if (neighborhood != null) {
             try {
                 if (jsonNode.get("neighborhoodName") != null) {

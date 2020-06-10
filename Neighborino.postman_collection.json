@@ -72,7 +72,7 @@
 							"variable": [
 								{
 									"key": "id",
-									"value": "1"
+									"value": "33"
 								}
 							]
 						}
@@ -93,7 +93,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"neighborhoodName\": \"Altona\",\r\n        \"neighborhoodCity\": \"Hamburg\",\r\n        \"neighborhoodPostalcode\": 22769,\r\n        \"neighborhoodCountry\": \"Deutschland\"\r\n    }\r\n]",
+							"raw": "[\r\n    {\r\n        \"neighborhoodName\": \"Wandsbek\",\r\n        \"neighborhoodCity\": \"Hamburg\",\r\n        \"neighborhoodPostalcode\": 20535,\r\n        \"neighborhoodCountry\": \"Deutschland\"\r\n    }\r\n]",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -119,6 +119,15 @@
 					"request": {
 						"method": "PUT",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n{\r\n\"neighborhoodName\": \"Altona\",\r\n\"neighborhoodPostalcode\": 22769,\r\n\"neighborhoodCity\": \"Hamburg\",\r\n\"neighborhoodCountry\": \"Deutschland\"\r\n}\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
 							"raw": "localhost:7000/api/neighborhoods/:id",
 							"host": [
@@ -314,7 +323,7 @@
 			"name": "Users",
 			"item": [
 				{
-					"name": "getAllCustomers",
+					"name": "getAllUsers",
 					"request": {
 						"method": "GET",
 						"header": [],
