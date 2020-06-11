@@ -5,8 +5,8 @@
       <ul id="navigation">
         <li><a href="/" ref="nav-home">Startseite</a></li>
         <li><a href="/users" ref="nav-users">Userverwaltung</a></li>
-        <li><a href="/customers" ref="nav-customers">Kundenverwaltung</a></li>
-        <li><a href="/orders" ref="nav-orders">Bestellung aufgeben</a></li>
+        <li><a href="/events" ref="nav-events">Event erstellen</a></li>
+        <li><a href="/neighborhoods" ref="nav-neighborhoods">Nachbarschaft erstellen</a></li>
         <li><a href="/about" ref="nav-about">Über diese Seite</a></li>
       </ul>
     </header>

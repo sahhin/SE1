@@ -8,7 +8,7 @@
                 <th>Vorname</th>
                 <th>Nachname</th>
                 <th>E-Mail-Adresse</th>
-                <th>Adresse</th>
+                <th>Organisator</th>
                 <th>Nachbarschaft</th>
             </tr>
             </thead>

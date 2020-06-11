@@ -4,10 +4,10 @@ package se1app.datatypes;
  * Data type für Status in Event
  */
 public enum EventStatus {
-    EVENT_PLANNED, // das Event ist geplant
-    EVENT_RELEASED, // das Event wurde aktualisiert
-    EVENT_CANCELED, // das Event ist abgesagt
-    EVENT_OCCURED; // das Event kommt
+    EVENT_PLANNED, // das Event geplant
+    EVENT_RELEASED, // das Event veröffentlicht
+    EVENT_CANCELED, // das Event abgesagt
+    EVENT_OCCURED; // das Event stattgefunden
 
     private EventStatus succ;
     private EventStatus pred;

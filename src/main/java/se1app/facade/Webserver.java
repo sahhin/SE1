@@ -54,9 +54,8 @@ public class Webserver {
     new NeighborhoodController(_server);
     _server.get("/", new VueComponent("<home-comp></home-comp>"));
     _server.get("/users", new VueComponent("<users-comp></users-comp>"));
-    _server.get("/customers", new VueComponent("<customers-comp></customers-comp>"));
-    _server.get("/orders", new VueComponent("<orders-comp></orders-comp>"));
+    _server.get("/events", new VueComponent("<events-comp></events-comp>"));
+    _server.get("/neighborhoods", new VueComponent("<neighborhoods-comp></neighborhoods-comp>"));
     _server.get("/about", new VueComponent("<about-comp></about-comp>"));
-    _server.get("/test", ctx -> ctx.result("Hello World"));
   }
 }

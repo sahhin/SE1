@@ -95,7 +95,7 @@ public class EventController {
                             endHours,
                             endMins
                     ),
-                    EventStatus.valueOf(jsonNode.get("eventStatusId").asText())
+                    EventStatus.EVENT_PLANNED
             );
             if (savedEvent != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
