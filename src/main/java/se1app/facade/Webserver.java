@@ -53,6 +53,7 @@ public class Webserver {
     new UserController(_server);
     new NeighborhoodController(_server);
     _server.get("/", new VueComponent("<home-comp></home-comp>"));
+    _server.get("/users", new VueComponent("<users-comp></users-comp>"));
     _server.get("/customers", new VueComponent("<customers-comp></customers-comp>"));
     _server.get("/orders", new VueComponent("<orders-comp></orders-comp>"));
     _server.get("/about", new VueComponent("<about-comp></about-comp>"));

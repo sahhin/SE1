@@ -80,7 +80,7 @@ public class EventController {
      */
     private static void createEvent(Context ctx) throws IOException {
         try {
-            var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
+            var jsonNode = new ObjectMapper().readTree(ctx.body());
             String[] times = jsonNode.get("eventTime").get("time").asText().split("-");
             int startHours = Integer.parseInt(times[0].substring(0, times[0].indexOf(':')));
             int startMins = Integer.parseInt(times[0].substring(times[0].indexOf(':')+1).strip());
@@ -117,7 +117,7 @@ public class EventController {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (event != null) {
             try {
-                var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
+                var jsonNode = new ObjectMapper().readTree(ctx.body());
                 if (jsonNode.get("eventDate") != null) {
                     event.setEventDate(sdf.parse(jsonNode.get("eventDate").toString()));
                 }

@@ -75,7 +75,7 @@ public class NeighborhoodController {
      */
     private static void createNeighborhood(Context ctx) throws IOException {
         try {
-            var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
+            var jsonNode = new ObjectMapper().readTree(ctx.body());
             var savedNeighborhood = NeighborhoodRepository.createNeighborhood(
                     jsonNode.get("neighborhoodName").asText(),
                     jsonNode.get("neighborhoodPostalcode").asInt(),
@@ -100,7 +100,7 @@ public class NeighborhoodController {
      */
     private static void updateNeighborhood(Context ctx) throws IOException {
         var neighborhood = fetchNeighborhood(ctx, "updateNeighborhood");
-        var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
+        var jsonNode = new ObjectMapper().readTree(ctx.body());
         if (neighborhood != null) {
             try {
                 if (jsonNode.get("neighborhoodName") != null) {

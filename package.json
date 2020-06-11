@@ -1,0 +1,11 @@
+{
+  "name": "se1",
+  "version": "1.0.0",
+  "dependencies": {
+    "vue-material": "latest",
+    "vue": "latest"
+  },
+  "devDependencies": {
+    "dist": "^0.1.2"
+  }
+}

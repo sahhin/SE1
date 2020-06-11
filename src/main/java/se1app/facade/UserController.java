@@ -82,7 +82,7 @@ public class UserController {
      */
     private static void createUser(Context ctx) throws IOException {
         try {
-            var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
+            var jsonNode = new ObjectMapper().readTree(ctx.body());
             var savedUser = UserRepository.createUser(
                     jsonNode.get("firstName").asText(),
                     jsonNode.get("lastName").asText(),
@@ -108,7 +108,7 @@ public class UserController {
         var user = fetchUser(ctx, "updateUser");
         if (user != null) {
             try {
-                var jsonNode = new ObjectMapper().readTree(ctx.body()).get(0);
+                var jsonNode = new ObjectMapper().readTree(ctx.body());
                 if (jsonNode.get("firstName") != null) {
                     user.setFirstName(jsonNode.get("firstName").asText());
                 }

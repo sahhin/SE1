@@ -93,7 +93,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n    {\r\n        \"neighborhoodName\": \"Wandsbek\",\r\n        \"neighborhoodCity\": \"Hamburg\",\r\n        \"neighborhoodPostalcode\": 20535,\r\n        \"neighborhoodCountry\": \"Deutschland\"\r\n    }\r\n]",
+							"raw": "{\r\n    \"neighborhoodName\": \"Wandsbek\",\r\n    \"neighborhoodCity\": \"Hamburg\",\r\n    \"neighborhoodPostalcode\": 20535,\r\n    \"neighborhoodCountry\": \"Deutschland\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -121,7 +121,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n{\r\n\"neighborhoodName\": \"Altona\",\r\n\"neighborhoodPostalcode\": 22769,\r\n\"neighborhoodCity\": \"Hamburg\",\r\n\"neighborhoodCountry\": \"Deutschland\"\r\n}\r\n]",
+							"raw": "{\r\n\"neighborhoodName\": \"Altona\",\r\n\"neighborhoodPostalcode\": 22769,\r\n\"neighborhoodCity\": \"Hamburg\",\r\n\"neighborhoodCountry\": \"Deutschland\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -253,7 +253,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n{\r\n\"_user\": null,\r\n\"_neighborhood\": null,\r\n\"eventName\": \"Waddup\",\r\n\"eventTime\": {\r\n\"time\": \"15:25 - 16:35\"\r\n},\r\n\"eventStatusId\": \"EVENT_RELEASED\",\r\n\"eventId\": 1,\r\n\"user\": null\r\n}\r\n]",
+							"raw": "{\r\n\"_user\": null,\r\n\"_neighborhood\": null,\r\n\"eventName\": \"Waddup\",\r\n\"eventTime\": {\r\n\"time\": \"15:25 - 16:35\"\r\n},\r\n\"eventStatusId\": \"EVENT_RELEASED\",\r\n\"eventId\": 1,\r\n\"user\": null\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -288,7 +288,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n{\r\n\"eventStatusId\": \"EVENT_PLANNED\",\r\n\"eventName\": \"Waddup\",\r\n\"user\": {},\r\n\"eventId\": 1\r\n}\r\n]",
+							"raw": "{\r\n\"eventStatusId\": \"EVENT_PLANNED\",\r\n\"eventName\": \"Waddup\",\r\n\"user\": {},\r\n\"eventId\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -407,7 +407,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n{\r\n\"custAdress\": {\r\n\"adress\": \"SEstrasse 1\"\r\n},\r\n\"firstName\": \"Test\",\r\n\"emailAddress\": {\r\n\"email\": \"test@test.de\"\r\n},\r\n\"lastName\": \"Postman\",\r\n\"neighborhood\": null,\r\n\"events\": []\r\n}\r\n]",
+							"raw": "{\r\n\"custAdress\": {\r\n\"adress\": \"SEstrasse 1\"\r\n},\r\n\"firstName\": \"Test\",\r\n\"emailAddress\": {\r\n\"email\": \"test@test.de\"\r\n},\r\n\"lastName\": \"Postman\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -442,7 +442,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\r\n{\r\n\"emailAddress\": {\r\n\"email\": \"test@test.de\"\r\n},\r\n\"custAdress\": {\r\n\"adress\": \"SEstrasse 1\"\r\n},\r\n\"firstName\": \"Testmann\",\r\n\"lastName\": \"Postman\",\r\n\"neighborhood\": null,\r\n\"events\": []\r\n}\r\n]",
+							"raw": "{\r\n\"emailAddress\": {\r\n\"email\": \"test@test.de\"\r\n},\r\n\"custAdress\": {\r\n\"adress\": \"SEstrasse 1\"\r\n},\r\n\"firstName\": \"Testmann\",\r\n\"lastName\": \"Postman\",\r\n\"neighborhood\": null,\r\n\"events\": []\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
