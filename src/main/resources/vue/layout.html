@@ -7,8 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="/webjars/vue/2.6.11/dist/vue.min.js"></script>
     <script src="/webjars/axios/0.19.2/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/vuejs-datepicker"></script>
+    <script src="https://unpkg.com/vue-material"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons">
+    <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/vue-material.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/theme/default.css">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <title>SE1 Demo App</title>
+    <title>Neighborino - The Place To Be</title>
     @componentRegistration
   </head>
 
@@ -17,14 +22,22 @@
     <main id="main-vue" v-cloak>
       @routeComponent
     </main>
+
+    <script src="https://unpkg.com/vue-material"></script>
     <script>
+      Vue.use(VueMaterial.default)
+
       new Vue({
         el: "#main-vue"
       });
     </script>
   </body>
 </html>
-
+<style>
+  html, body, #main-vue{
+    width: 100%;
+  }
+</style>
 <!-- Links bezüglich Vue.js und HTML/CSS:
 
 - Schreibweise Property-Namen: https://vuejs.org/v2/guide/components-props.html

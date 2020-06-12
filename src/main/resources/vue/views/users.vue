@@ -22,7 +22,11 @@
                 <td v-if="user._neighborhood != null">{{user._neighborhood.neighborhoodPostalcode}},
                     {{user._neighborhood.neighborhoodCity}}, {{user._neighborhood.neighborhoodName}}
                 </td>
-                <td v-if="user._neighborhood == null">Keine Nachbarschaft</td>
+                <td v-if="user._neighborhood == null">
+                    Keine Nachbarschaft
+                    <span class="addNeighborhood">+</span>
+                </td>
+                <td v-on:click="removeUser(user.id)">X</td>
             </tr>
             </tbody>
         </table>
@@ -72,13 +76,13 @@
         }),
 
         created() {
-            this.loadCustomers();
+            this.loadUsers();
         },
 
         methods: {
 
             /** Load all users from the REST endpoint. */
-            loadCustomers: function () {
+            loadUsers: function () {
                 axios.get("/api/users")
                     .then(response => {
                         this.users = response.data;
@@ -109,7 +113,7 @@
                         custAdress: {adress: this.newCustomer.adress}
                     }).then(response => {
                         console.log("POST successful.");  // Got a success code as response (201).
-                        this.loadCustomers();             // Reload the customer table.
+                        this.loadUsers();             // Reload the customer table.
                         this.newCustomer = {};            // Clear input fields.
                     }, error => {
                         console.error("POST failed! Error:");  // Something failed.
@@ -117,6 +121,18 @@
                     });
                 }
                 e.preventDefault();
+            },
+
+            removeUser: function (userId){
+                console.log(userId);
+                axios.delete("/api/users/" + userId
+                ).then(response => {
+                    console.log("DEL successful.");  // Got a success code as response (201).
+                    this.loadUsers();             // Reload the customer table.
+                }, error => {
+                    console.error("DEL failed! Error:");  // Something failed.
+                    console.error(error);                  // Print error message on console.
+                });
             },
 
             /** Validate an e-mail address.
@@ -136,6 +152,9 @@
         background-color: lightgrey;
     }
 
+    .addNeighborhood{
+        font-size: 150%;
+    }
     #formCreateCustomer label {
         float: left;
         min-width: 100px;

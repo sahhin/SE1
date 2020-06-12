@@ -18,6 +18,7 @@
                 <td>{{neighborhood.neighborhoodCity}}</td>
                 <td>{{neighborhood.neighborhoodPostalcode}}</td>
                 <td>{{neighborhood.neighborhoodCountry}}</td>
+                <td v-on:click="removeNeighborhood(neighborhood.neighborhoodId)">X</td>
             </tr>
             </tbody>
         </table>
@@ -78,6 +79,19 @@
                         this.neighborhoods = response.data;
                     }).catch(() => {
                     alert("Error while fetching neighborhoods");
+                });
+            },
+
+
+            removeNeighborhood: function (neighborhoodId){
+                console.log(neighborhoodId);
+                axios.delete("/api/neighborhoods/" + neighborhoodId
+                ).then(response => {
+                    console.log("DEL successful.");  // Got a success code as response (201).
+                    this.loadCustomers();             // Reload the customer table.
+                }, error => {
+                    console.error("DEL failed! Error:");  // Something failed.
+                    console.error(error);                  // Print error message on console.
                 });
             },
 

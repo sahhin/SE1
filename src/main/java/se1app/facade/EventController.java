@@ -11,6 +11,8 @@ import se1app.entities.Neighborhood;
 import se1app.entities.User;
 import se1app.exceptions.InvalidEmailException;
 import se1app.repositories.EventRepository;
+import se1app.repositories.NeighborhoodRepository;
+import se1app.usecases.EventUseCase;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -113,6 +115,7 @@ public class EventController {
      * @param ctx HTTP context (request/response handle).
      */
     private static void updateEvent(Context ctx) throws IOException {
+        System.out.println(ctx.body());
         var event = fetchEvent(ctx, "updateEvent");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         if (event != null) {
@@ -133,6 +136,9 @@ public class EventController {
                 }
                 if (jsonNode.get("eventStatusId") != null) {
                     event.setEventStatusId(EventStatus.valueOf(jsonNode.get("eventStatusId").asText()));
+                }
+                if(jsonNode.get("neighborhoodId") != null){
+                    event.setNeighborhood(NeighborhoodRepository.getNeighborhoodById(jsonNode.get("neighborhoodId").asInt()));
                 }
 
                 EventRepository.saveEvent(event);
