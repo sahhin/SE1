@@ -1,7 +1,7 @@
 <template id="events-tmpl" v-cloak>
     <app-frame current-page="events">
-        <div class="md-layout md-gutter">
-            <div class="md-layout-item md-size-75 md-medium-size-75 md-small-size-100 md-xsmall-size-100 nTable">
+        <div class="md-layout">
+            <div class="md-layout-item md-size-75 md-medium-size-100 md-small-size-100 md-xsmall-size-100 nTable">
                 <md-card md-with-hover>
                     <md-card-header>
                         <div class="md-title">Events verwalten</div>
@@ -25,46 +25,11 @@
                             <md-table-cell>{{event.eventTime.time}}</md-table-cell>
                             <md-table-cell>{{getEventStatus(event.eventStatusId)}}</md-table-cell>
 
-                            <!--                    user select-->
                             <md-table-cell v-if="event._user != null">
                                 #{{event._user.id}} {{event._user.lastName}}, {{event._user.firstName}}
                             </md-table-cell>
-                            <md-table-cell v-if="event._user == null">
-                                <md-field>
-                                    <label :for="'users_' + index">Organisator</label>
-                                    <md-select :name="'users_' + index" :id="'users_' + index" v-model="users.userId">
-                                        <md-option v-for="user in users" :value="user.userId">
-                                            {{user.firstName}} {{user.lastName}}
-                                        </md-option>
-                                    </md-select>
-                                </md-field>
-                                <md-button style="display: block" class="md-button md-raised md-primary"
-                                           v-on:click="addOrganizer(event.eventId, users.userId)">
-                                    Speichern
-                                    <md-icon>done</md-icon>
-                                </md-button>
-                            </md-table-cell>
 
-                            <!--                    neighborhood select-->
                             <md-table-cell v-if="event._neighborhood != null">{{event._neighborhood.neighborhoodName}}
-                            </md-table-cell>
-                            <md-table-cell v-if="event._neighborhood == null">
-                                <md-field style="display: block">
-                                    <label :for="'neighborhoods_' + index">Nachbarschaft</label>
-                                    <md-select :name="'neighborhoods_' + index" :id="'neighborhoods_' + index"
-                                               v-model="neighborhoods.neighborhoodId">
-                                        <md-option v-for="neighborhood in neighborhoods"
-                                                   :value="neighborhood.neighborhoodId">
-                                            {{neighborhood.neighborhoodName}}
-                                        </md-option>
-                                    </md-select>
-                                </md-field>
-
-                                <md-button style="display: block" class="md-button md-raised md-primary"
-                                           v-on:click="addNeighborhood(event.eventId, neighborhoods.neighborhoodId)">
-                                    Speichern
-                                    <md-icon>done</md-icon>
-                                </md-button>
                             </md-table-cell>
 
                             <md-table-cell class="participants">
@@ -92,7 +57,7 @@
                         md-cancel-text="Abbrechen"
                         @md-confirm="onConfirm" />
             </div>
-            <div class="md-layout-item md-size-25 md-medium-size-25 md-small-size-100 md-xsmall-size-100">
+            <div class="md-layout-item md-size-25 md-medium-size-100 md-small-size-100 md-xsmall-size-100">
                 <form id="formCreateEvent" @submit="processForm">
                 <md-card md-with-hover>
                     <md-card-header>
@@ -110,14 +75,44 @@
                             <label for="eStartTime">Startzeit:</label>
                             <md-input style="text-align: right;" type="time" id="eStartTime"
                                       v-model="newEvent.eStartTime"
-                                      min="09:00" max="18:00"></md-input>
+                                      min="00:00" max="23:59"></md-input>
                         </md-field>
 
                         <md-field md-clearable>
                             <label for="eStartTime">Endzeit:</label>
                             <md-input style="text-align: right;" type="time" id="eEndTime"
                                       v-model="newEvent.eEndTime"
-                                      min="09:00" max="18:00"></md-input>
+                                      min="00:00" max="23:59"></md-input>
+                        </md-field>
+
+                        <md-field>
+                            <label for="neighborhoods">Nachbarschaft</label>
+                            <md-select name="neighborhoods" id="neighborhoods"
+                                       v-model="neighborhoods.neighborhoodId">
+                                <md-option v-for="neighborhood in neighborhoods" :value="neighborhood.neighborhoodId">
+                                    {{neighborhood.neighborhoodName}}
+                                </md-option>
+                            </md-select>
+                        </md-field>
+
+                        <md-field>
+                            <label for="users">Organisator</label>
+                            <md-select name="users" id="users"
+                                       v-model="users.id">
+                                <md-option v-for="user in users" :value="user.id">
+                                    #{{user.id}} {{user.lastName}}, {{user.firstName}}
+                                </md-option>
+                            </md-select>
+                        </md-field>
+
+                        <md-field>
+                            <label for="participants">Teilnehmer</label>
+                            <md-select name="participants" id="participants"
+                                       v-model="participants.id" multiple>
+                                <md-option v-for="participant in users" :value="participant.id">
+                                    #{{participant.id}} {{participant.firstName}} {{participant.lastName}}
+                                </md-option>
+                            </md-select>
                         </md-field>
 
                     </md-card-content>
@@ -154,18 +149,25 @@
     Vue.component("events-comp", {
         template: "#events-tmpl",
         components: {
-            vuejsDatepicker
+            vuejsDatepicker,
+            VueToastr2
         },
         data: () => ({
             newEvent: {},
             events: [],
             neighborhoods: [],
             users: [],
+            participants: [],
             errors: [],
             elementToDelete: null,
-            selectNeighborhoodState: false,
-            selectOrganizerState: false,
-            active: false
+            active: false,
+            toastrOptions: {
+                progressBar: true,
+                closeButton: true,
+                timeOut: 10000,
+                preventDuplicates: true,
+                positionClass: 'toast-bottom-right'
+            }
         }),
 
         created() {
@@ -204,8 +206,10 @@
                 axios.get("/api/neighborhoods")
                     .then(response => {
                         this.neighborhoods = response.data;
+                        // this.$toastr.success('Success while fetching neighborhoods', 'GET /api/neighborhoods');
                     }).catch(() => {
-                    alert("Error while fetching neighborhoods");
+                    this.$toastr.error('Error while fetching neighborhoods', 'GET /api/neighborhoods');
+                    // this.loadNeighborhoods();
                 });
             },
 
@@ -215,37 +219,10 @@
                 axios.get("/api/users")
                     .then(response => {
                         this.users = response.data;
+                        // this.$toastr.success('Success while fetching users', 'GET /api/users');
                     }).catch(() => {
-                    alert("Error while fetching users");
-                });
-            },
-
-            addNeighborhood: function (eventId, neighborhoodId) {
-                console.log(eventId + " " + neighborhoodId);
-                axios.put("/api/events/" + eventId, {
-                    neighborhoodId: neighborhoodId,
-                }).then(response => {
-                    console.log("PUT successful.");  // Got a success code as response (201).
-                    this.loadEvents();             // Reload the customer table.
-                    this.newEvent = {};            // Clear input fields.
-                    this.selectNeighborhoodState = false;
-                }, error => {
-                    console.error("PUT failed! Error:");  // Something failed.
-                    console.error(error);                  // Print error message on console.
-                });
-            },
-
-            addOrganizer: function (eventId, userId) {
-                axios.put("/api/events/" + eventId, {
-                    userId: userId,
-                }).then(response => {
-                    console.log("PUT successful.");  // Got a success code as response (201).
-                    this.loadEvents();             // Reload the customer table.
-                    this.newEvent = {};            // Clear input fields.
-                    this.selectNeighborhoodState = false;
-                }, error => {
-                    console.error("PUT failed! Error:");  // Something failed.
-                    console.error(error);                  // Print error message on console.
+                    this.$toastr.error('Error while fetching users', 'GET /api/users');
+                    // this.loadUsers();
                 });
             },
 
@@ -254,24 +231,16 @@
                 axios.get("/api/events")
                     .then(response => {
                         this.events = response.data;
-                        for (let i = 0; i < this.events.length; i++) {
-                            this.selectOrganizerState.push(
-                                {
-                                    id: i,
-                                    selected: false
-                                }
-                            );
-                        }
+                        // this.$toastr.success('Success while fetching events', 'GET /api/events', this.toastrOptions);
                     }).catch(() => {
-                    alert("Error while fetching events");
+                    this.$toastr.error('Error while fetching events', 'GET /api/events', this.toastrOptions);
+                    // this.loadEvents();
                 });
             },
 
 
             /** Process the input form to create a new customer. */
             processForm: function (e) {
-
-
                 // Validate the user's input.
                 this.errors = [];
                 if (!this.newEvent.eventName) this.errors.push('Titel fehlt');
@@ -283,8 +252,11 @@
                     axios.post("/api/events", {
                         eventName: this.newEvent.eventName,
                         eventTime: {time: this.newEvent.eStartTime + " - " + this.newEvent.eEndTime},
+                        _neighborhood: this.neighborhood.neighborhoodId,
+                        _user: this.user.id,
+                        _eventUser: this.participants.id
                     }).then(response => {
-                        console.log("POST successful.");  // Got a success code as response (201).
+                        this.$toastr.success('POST successful', 'POST /api/events', this.toastrOptions);
                         this.loadEvents();             // Reload the customer table.
                         this.newEvent = {};            // Clear input fields.
                     }, error => {
@@ -299,7 +271,7 @@
                 console.log(eventId);
                 axios.delete("/api/events/" + eventId
                 ).then(response => {
-                    console.log("DEL successful.");  // Got a success code as response (201).
+                    this.$toastr.success('DEL successful.', 'DEL /api/events', this.toastrOptions);
                     this.loadEvents();             // Reload the customer table.
                 }, error => {
                     console.error("DEL failed! Error:");  // Something failed.
@@ -355,5 +327,7 @@
     #cardFormError {
         color: red;
         background-color: rgb(255, 210, 210);
+        margin: 0;
+        cursor: default;
     }
 </style>

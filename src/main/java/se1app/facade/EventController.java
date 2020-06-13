@@ -7,12 +7,10 @@ import io.javalin.http.Context;
 import se1app.datatypes.EventStatus;
 import se1app.datatypes.TimeType;
 import se1app.entities.Event;
-import se1app.entities.Neighborhood;
-import se1app.entities.User;
 import se1app.exceptions.InvalidEmailException;
 import se1app.repositories.EventRepository;
 import se1app.repositories.NeighborhoodRepository;
-import se1app.usecases.EventUseCase;
+import se1app.repositories.UserRepository;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -81,13 +79,14 @@ public class EventController {
      * @param ctx HTTP context (request/response handle).
      */
     private static void createEvent(Context ctx) throws IOException {
+        System.out.println(ctx.body());
         try {
             var jsonNode = new ObjectMapper().readTree(ctx.body());
             String[] times = jsonNode.get("eventTime").get("time").asText().split("-");
             int startHours = Integer.parseInt(times[0].substring(0, times[0].indexOf(':')));
-            int startMins = Integer.parseInt(times[0].substring(times[0].indexOf(':')+1).strip());
+            int startMins = Integer.parseInt(times[0].substring(times[0].indexOf(':') + 1).strip());
             int endHours = Integer.parseInt(times[1].substring(0, times[1].indexOf(':')).strip());
-            int endMins = Integer.parseInt(times[1].substring(times[1].indexOf(':')+1));
+            int endMins = Integer.parseInt(times[1].substring(times[1].indexOf(':') + 1));
             var savedEvent = EventRepository.createEvent(
                     jsonNode.get("eventName").asText(),
                     new Date(),
@@ -98,7 +97,11 @@ public class EventController {
                             endMins
                     ),
                     EventStatus.EVENT_PLANNED
-            );
+                    );
+
+//            savedEvent.setNeighborhood(NeighborhoodRepository.getNeighborhoodById(jsonNode.get("neighborhoodId").asInt()));
+//            savedEvent.setOrganiser(UserRepository.getUserById(jsonNode.get("userId").asInt()));
+//            System.out.println(jsonNode.get("_eventUser"));
             if (savedEvent != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
         } catch (JsonProcessingException ex) {
@@ -137,10 +140,13 @@ public class EventController {
                 if (jsonNode.get("eventStatusId") != null) {
                     event.setEventStatusId(EventStatus.valueOf(jsonNode.get("eventStatusId").asText()));
                 }
-                if(jsonNode.get("neighborhoodId") != null){
+                if (jsonNode.get("neighborhoodId") != null) {
                     event.setNeighborhood(NeighborhoodRepository.getNeighborhoodById(jsonNode.get("neighborhoodId").asInt()));
                 }
-
+                if (jsonNode.get("userId") != null) {
+                    System.out.println(jsonNode.get("userId").asInt());
+                    event.setOrganiser(UserRepository.getUserById(jsonNode.get("userId").asInt()));
+                }
                 EventRepository.saveEvent(event);
                 ctx.res.setStatus(200);
             } catch (JsonProcessingException | InvalidEmailException | ParseException ex) {

@@ -26,7 +26,7 @@ public class EventRepository {
      * @param eventStatusId Status of event. See EventStatus
      * @return Created event or null
      */
-    public static Event createEvent( String eventName, Date eventDate, TimeType eventTime, EventStatus eventStatusId) {
+    public static Event createEvent(String eventName, Date eventDate, TimeType eventTime, EventStatus eventStatusId) {
         try {
             var event = new Event(eventName, eventDate, eventTime, eventStatusId);
             saveEvent(event);
@@ -45,7 +45,7 @@ public class EventRepository {
         var session = H2Database.getInstance().getSession();
         var transaction = session.beginTransaction();
         session.save(event);
-        transaction.commit();
+//        transaction.commit();
     }
 
     /**

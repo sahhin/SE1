@@ -9,6 +9,8 @@
     <script src="/webjars/axios/0.19.2/dist/axios.min.js"></script>
     <script src="https://unpkg.com/vuejs-datepicker"></script>
     <script src="https://unpkg.com/vue-material"></script>
+    <script src="https://unpkg.com/vue-toastr-2/dist/vue-toastr-2.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/vue-toastr-2/dist/vue-toastr-2.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic|Material+Icons">
     <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/vue-material.min.css">
     <link rel="stylesheet" href="https://unpkg.com/vue-material/dist/theme/default.css">
@@ -25,7 +27,8 @@
 
     <script src="https://unpkg.com/vue-material"></script>
     <script>
-      Vue.use(VueMaterial.default)
+      Vue.use(VueMaterial.default);
+      Vue.use(VueToastr2);
 
       new Vue({
         el: "#main-vue"
@@ -35,7 +38,11 @@
 </html>
 <style>
   html, body, #main-vue{
+    height: 100%;
     width: 100%;
+  }
+  #main-vue{
+    overflow-x: hidden;
   }
 </style>
 <!-- Links bezüglich Vue.js und HTML/CSS:
