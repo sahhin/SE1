@@ -45,7 +45,7 @@ public class EventRepository {
         var session = H2Database.getInstance().getSession();
         var transaction = session.beginTransaction();
         session.save(event);
-//        transaction.commit();
+        transaction.commit();
     }
 
     /**
