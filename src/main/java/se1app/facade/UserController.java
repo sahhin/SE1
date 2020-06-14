@@ -11,6 +11,7 @@ import se1app.datatypes.TimeType;
 import se1app.entities.Event;
 import se1app.entities.Neighborhood;
 import se1app.exceptions.InvalidEmailException;
+import se1app.repositories.NeighborhoodRepository;
 import se1app.repositories.UserRepository;
 import se1app.entities.User;
 
@@ -89,6 +90,9 @@ public class UserController {
                     jsonNode.get("emailAddress").get("email").asText(),
                     jsonNode.get("custAdress").get("adress").asText()
             );
+            System.out.println(jsonNode.get("_neighborhood").asInt());
+            savedUser.setNeighborhood(NeighborhoodRepository.getNeighborhoodById(jsonNode.get("_neighborhood").asInt()));
+            UserRepository.saveUser(savedUser);
             if (savedUser != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
         } catch (JsonProcessingException ex) {

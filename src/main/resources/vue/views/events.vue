@@ -174,6 +174,7 @@
             this.loadEvents();
             this.loadNeighborhoods();
             this.loadUsers();
+            document.title = "Events - " + document.title;
         },
 
         methods: {
@@ -187,18 +188,6 @@
             },
             onCancel () {
                 this.elementToDelete = null;
-            },
-            addNeighborhoodState: function () {
-                this.selectNeighborhoodState = !this.selectNeighborhoodState;
-            },
-
-            getOrganizerState: function (id) {
-                // console.log(id)
-                return this.selectOrganizerState[2].selected;
-            },
-
-            addOrganizerState: function (id) {
-                this.selectOrganizerState[1].selected = !this.selectOrganizerState[1].selected;
             },
 
             /** Load all neighborhoods from the REST endpoint. */
@@ -249,12 +238,13 @@
 
                 // Input validation successful! Send POST request to the backend.
                 if (this.errors.length === 0) {
+                    const parts = this.participants.id.toString();
                     axios.post("/api/events", {
                         eventName: this.newEvent.eventName,
                         eventTime: {time: this.newEvent.eStartTime + " - " + this.newEvent.eEndTime},
-                        _neighborhood: this.neighborhood.neighborhoodId,
-                        _user: this.user.id,
-                        _eventUser: this.participants.id
+                        _neighborhood: this.neighborhoods.neighborhoodId,
+                        _user: this.users.id,
+                        _eventUser: parts
                     }).then(response => {
                         this.$toastr.success('POST successful', 'POST /api/events', this.toastrOptions);
                         this.loadEvents();             // Reload the customer table.

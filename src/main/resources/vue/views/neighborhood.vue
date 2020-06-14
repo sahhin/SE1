@@ -120,7 +120,9 @@
         }),
 
         created() {
-            this.loadCustomers();
+            this.loadNeighborhoods();
+            document.title = "Neighborhoods - " + document.title;
+
         },
 
         methods: {
@@ -137,7 +139,7 @@
                 this.elementToDelete = null;
             },
             /** Load all neighborhoods from the REST endpoint. */
-            loadCustomers: function () {
+            loadNeighborhoods: function () {
                 axios.get("/api/neighborhoods")
                     .then(response => {
                         this.neighborhoods = response.data;
@@ -152,7 +154,7 @@
                 axios.delete("/api/neighborhoods/" + neighborhoodId
                 ).then(response => {
                     console.log("DEL successful.");  // Got a success code as response (201).
-                    this.loadCustomers();             // Reload the customer table.
+                    this.loadNeighborhoods();             // Reload the customer table.
                 }, error => {
                     console.error("DEL failed! Error:");  // Something failed.
                     console.error(error);                  // Print error message on console.
@@ -179,7 +181,7 @@
                         neighborhoodCountry: this.newNeighborhood.neighborhoodCountry
                     }).then(response => {
                         console.log("POST successful.");  // Got a success code as response (201).
-                        this.loadCustomers();             // Reload the customer table.
+                        this.loadNeighborhoods();             // Reload the customer table.
                         this.newNeighborhood = {};            // Clear input fields.
                     }, error => {
                         console.error("POST failed! Error:");  // Something failed.

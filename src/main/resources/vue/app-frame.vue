@@ -5,9 +5,12 @@
                 <md-button @click="menuVisible = !menuVisible" class="md-icon-button">
                     <md-icon>menu</md-icon>
                 </md-button>
-                <span class="md-title nodrag">Neighborino - {{this.currentPageCapitalized}}</span>
+                <span class="md-title nodrag"><span class="title">Neighborino</span> - {{this.currentPageCapitalized}}</span>
                 <img class="nodrag" src="potara.png" id="logo" alt="QuickShop Demo App Logo" />
+                <p style="text-align:right; width:100%;margin-right: 16px">Made with <md-icon style="font-size: 75%">music_note</md-icon> in Hamburg. Stay healthy. Stay at home.</p>
+
             </md-app-toolbar>
+
 
             <md-app-drawer :md-active.sync="menuVisible">
                 <md-toolbar class="md-transparent md-medium" md-elevation="0">
@@ -57,10 +60,11 @@
                 <slot>
                     <!-- Hier wird automatisch der restliche Code des Komponenten-Templates eingefügt! -->
                 </slot>
-
             </md-app-content>
+
         </md-app>
     </div>
+
 </template>
 
 <script>
@@ -141,5 +145,11 @@
         border-top: 1px solid lightgrey;
         margin-top: 25px;
         padding: 5px;
+    }
+
+    .title{
+        font-size: 25pt;
+        font-family: 'Pacifico', cursive;
+        line-height: 50pt;
     }
 </style>

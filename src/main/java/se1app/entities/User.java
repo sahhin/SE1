@@ -36,10 +36,10 @@ public class User {
     @AttributeOverride(name = "_adress", column = @Column(name = "userAdress"))
     private AdressType _userAdress;
 
-    @OneToMany(mappedBy = "_user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "_user", cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     private List<Event> _events;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinColumn(name = "neighborhood_id")
     public Neighborhood _neighborhood;
 

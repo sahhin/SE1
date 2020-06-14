@@ -9,7 +9,10 @@
   Vue.component("about-comp", {
     template: "#about-tmpl",
     data: () => ({
-    })
+    }),
+    created() {
+      document.title = "Über - " + document.title;
+    }
   });
 </script>
 

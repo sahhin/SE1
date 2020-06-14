@@ -7,6 +7,7 @@ import io.javalin.http.Context;
 import se1app.datatypes.EventStatus;
 import se1app.datatypes.TimeType;
 import se1app.entities.Event;
+import se1app.entities.User;
 import se1app.exceptions.InvalidEmailException;
 import se1app.repositories.EventRepository;
 import se1app.repositories.NeighborhoodRepository;
@@ -15,7 +16,10 @@ import se1app.repositories.UserRepository;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 
 /**
@@ -99,9 +103,17 @@ public class EventController {
                     EventStatus.EVENT_PLANNED
                     );
 
-//            savedEvent.setNeighborhood(NeighborhoodRepository.getNeighborhoodById(jsonNode.get("neighborhoodId").asInt()));
-//            savedEvent.setOrganiser(UserRepository.getUserById(jsonNode.get("userId").asInt()));
-//            System.out.println(jsonNode.get("_eventUser"));
+            savedEvent.setNeighborhood(NeighborhoodRepository.getNeighborhoodById(jsonNode.get("_neighborhood").asInt()));
+            savedEvent.setOrganiser(UserRepository.getUserById(jsonNode.get("_user").asInt()));
+
+            String[] participants =  jsonNode.get("_eventUser").asText().split(",");
+//            System.out.println(jsonNode.get("_eventUser").asText());
+            List<User> newParticipants = new ArrayList<User>();
+            for(int i = 0; i < participants.length; i++){
+                newParticipants.add(UserRepository.getUserById(Integer.parseInt(participants[i])));
+            }
+            savedEvent.addUsers(newParticipants);
+            EventRepository.saveEvent(savedEvent);
             if (savedEvent != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
         } catch (JsonProcessingException ex) {

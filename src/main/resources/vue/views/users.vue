@@ -1,66 +1,118 @@
-<template id="users-tmpl">
-    <app-frame current-page="users">
-        <h1>Userverwaltung</h1>
-        <table cellspacing="0" border="1">
-            <thead>
-            <tr>
-                <th>User ID</th>
-                <th>Vorname</th>
-                <th>Nachname</th>
-                <th>E-Mail-Adresse</th>
-                <th>Organisator</th>
-                <th>Nachbarschaft</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr v-for="user in this.users" v-bind:key="user.id">
-                <td>{{user.id}}</td>
-                <td>{{user.firstName}}</td>
-                <td>{{user.lastName}}</td>
-                <td>{{user.emailAddress.email}}</td>
-                <td>{{user.custAdress.adress}}</td>
-                <td v-if="user._neighborhood != null">{{user._neighborhood.neighborhoodPostalcode}},
-                    {{user._neighborhood.neighborhoodCity}}, {{user._neighborhood.neighborhoodName}}
-                </td>
-                <td v-if="user._neighborhood == null">
-                    Keine Nachbarschaft
-                    <span class="addNeighborhood">+</span>
-                </td>
-                <td v-on:click="removeUser(user.id)">X</td>
-            </tr>
-            </tbody>
-        </table>
+<template id="users-tmpl" v-cloak>
+        <app-frame current-page="users">
+        <div class="md-layout">
+            <div class="md-layout-item md-size-75 md-medium-size-100 md-small-size-100 md-xsmall-size-100 nTable">
+                <md-card md-with-hover>
+                    <md-card-header>
+                        <div class="md-title">User verwalten</div>
+                        <div class="md-subhead">User ansehen, verändern und löschen</div>
+                    </md-card-header>
+                    <md-table>
+                        <md-table-row>
+                            <md-table-head md-numeric>User ID</md-table-head>
+                            <md-table-head>Vorname</md-table-head>
+                            <md-table-head>Nachname</md-table-head>
+                            <md-table-head>E-Mail-Adresse</md-table-head>
+                            <md-table-head>Organisator</md-table-head>
+                            <md-table-head>Nachbarschaft</md-table-head>
+                            <md-table-head>Löschen</md-table-head>
+                        </md-table-row>
 
-        <h2>Neuen User anlegen</h2>
-        <form id="formCreateCustomer" @submit="processForm">
+                        <tr v-for="user in this.users" v-bind:key="user.id">
+                        <md-table-row v-for="user in this.users" v-bind:key="user.id">
+                            <md-table-cell md-numeric>{{user.id}}</md-table-cell>
+                            <md-table-cell>{{user.firstName}}</md-table-cell>
+                            <md-table-cell>{{user.lastName}}</md-table-cell>
+                            <md-table-cell>{{user.emailAddress.email}}</md-table-cell>
 
-            <div id="formErrorMsg" v-if="errors.length">
-                <h3>Bitte korrigiere die folgenden Fehler:</h3>
-                <ul>
-                    <li v-for="error in errors" v-bind:key="error">{{ error }}</li>
-                </ul>
+                            <md-table-cell>
+                                {{user.custAdress.adress}}
+                            </md-table-cell>
+
+                            <md-table-cell v-if="user._neighborhood != null">
+                                {{user._neighborhood.neighborhoodCity}}, {{user._neighborhood.neighborhoodName}}
+                            </md-table-cell>
+
+                            <md-table-cell>
+
+                                <md-button class="md-icon-button md-raised md-accent" @click="confirmDelete(user.id)">
+                                    <md-icon>delete</md-icon>
+                                </md-button>
+                            </md-table-cell>
+                        </md-table-row>
+                    </md-table>
+                </md-card>
+                <md-dialog-confirm
+                        :md-active.sync="active"
+                        md-title="User wirklich löschen?"
+                        md-content="Der ausgewählte User wird gelöscht und kann nicht wiederhergestellt werden!"
+                        md-confirm-text="Löschen"
+                        md-cancel-text="Abbrechen"
+                        @md-confirm="onConfirm" />
             </div>
+            <div class="md-layout-item md-size-25 md-medium-size-100 md-small-size-100 md-xsmall-size-100">
+                <form id="formCreateCustomer" @submit="processForm">
+                    <md-card md-with-hover>
+                        <md-card-header>
+                            <div class="md-title">User anlegen</div>
+                        </md-card-header>
 
-            <p>
-                <label for="uFirstName">Vorname:</label>
-                <input id="uFirstName" v-model="newCustomer.firstName" type="text"/>
-            </p>
-            <p>
-                <label for="uLastName">Nachname:</label>
-                <input id="uLastName" v-model="newCustomer.lastName" type="text"/>
-            </p>
-            <p>
-                <label for="uAdress">Adresse:</label>
-                <input id="uAdress" v-model="newCustomer.adress" type="text" size="30"/>
-            </p>
-            <p>
-                <label for="uEmail">E-Mail:</label>
-                <input id="uEmail" v-model="newCustomer.email" type="text" size="30"/>
-            </p>
-            <p>
-                <input type="submit" value="Abschicken"/>
-            </p>
-        </form>
+                        <md-card-content>
+                            <md-field md-clearable>
+                                <label for="uFirstName">Vorname:</label>
+                                <md-input id="uFirstName" v-model="newCustomer.firstName" type="text"></md-input>
+                            </md-field>
+
+                            <md-field md-clearable>
+                                <label for="uLastName">Nachname:</label>
+                                <md-input id="uLastName" v-model="newCustomer.lastName" type="text"></md-input>
+                            </md-field>
+
+                            <md-field md-clearable>
+                                <label for="uAdress">Adresse:</label>
+                                <md-input id="uAdress" v-model="newCustomer.adress" type="text"></md-input>
+                            </md-field>
+
+                            <md-field md-clearable>
+                                <label for="uEmail">E-Mail:</label>
+                                <md-input id="uEmail" v-model="newCustomer.email" type="text"></md-input>
+                            </md-field>
+
+                            <md-field>
+                                <label for="neighborhoods">Nachbarschaft</label>
+                                <md-select name="neighborhoods" id="neighborhoods"
+                                           v-model="neighborhoods.neighborhoodId">
+                                    <md-option v-for="neighborhood in neighborhoods" :value="neighborhood.neighborhoodId">
+                                        {{neighborhood.neighborhoodName}}
+                                    </md-option>
+                                </md-select>
+                            </md-field>
+
+                        </md-card-content>
+
+                        <md-card-actions>
+                            <md-button class="md-raised md-primary" type="submit">
+                                Speichern
+                                <md-icon>save</md-icon>
+                            </md-button>
+                            <md-button class="md-raised md-accent" type="reset" v-on:click="errors = []">
+                                Felder leeren
+                                <md-icon>delete</md-icon>
+                            </md-button>
+                        </md-card-actions>
+
+                        <md-card id="cardFormError" v-if="errors.length">
+                            <md-card-header>
+                                <div class="md-title">Bitte korrigiere die folgenden Fehler:</div>
+                            </md-card-header>
+                            <div style="padding: 16px">
+                                <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
+                            </div>
+                        </md-card>
+                    </md-card>
+                </form>
+            </div>
+        </div>
     </app-frame>
 </template>
 
@@ -69,17 +121,45 @@
     Vue.component("users-comp", {
         template: "#users-tmpl",
 
+        components: {
+            VueToastr2
+        },
+
         data: () => ({
             newCustomer: {},
             users: [],
-            errors: []
+            errors: [],
+            neighborhoods: [],
+            _neighborhood: null,
+            elementToDelete: null,
+            active: false,
+            toastrOptions: {
+                progressBar: true,
+                closeButton: true,
+                timeOut: 10000,
+                preventDuplicates: true,
+                positionClass: 'toast-bottom-right'
+            }
         }),
 
         created() {
             this.loadUsers();
+            this.loadNeighborhoods();
+            document.title = "Users - " + document.title;
         },
 
         methods: {
+            confirmDelete(userId){
+                this.active = true;
+                this.elementToDelete = userId;
+            },
+            onConfirm () {
+                this.removeUser(this.elementToDelete);
+                this.elementToDelete = null;
+            },
+            onCancel () {
+                this.elementToDelete = null;
+            },
 
             /** Load all users from the REST endpoint. */
             loadUsers: function () {
@@ -88,6 +168,16 @@
                         this.users = response.data;
                     }).catch(() => {
                     alert("Error while fetching users");
+                });
+            },
+
+            /** Load all neighborhoods from the REST endpoint. */
+            loadNeighborhoods: function () {
+                axios.get("/api/neighborhoods")
+                    .then(response => {
+                        this.neighborhoods = response.data;
+                    }).catch(() => {
+                    this.$toastr.error('Error while fetching neighborhoods', 'GET /api/neighborhoods');
                 });
             },
 
@@ -105,12 +195,12 @@
 
                 // Input validation successful! Send POST request to the backend.
                 if (this.errors.length == 0) {
-                    console.log(this.newCustomer.firstName, this.newCustomer.lastName, this.newCustomer.adress, this.newCustomer.email);
                     axios.post("/api/users", {
                         firstName: this.newCustomer.firstName,
                         lastName: this.newCustomer.lastName,
                         emailAddress: {email: this.newCustomer.email},
-                        custAdress: {adress: this.newCustomer.adress}
+                        custAdress: {adress: this.newCustomer.adress},
+                        _neighborhood: this.neighborhoods.neighborhoodId
                     }).then(response => {
                         console.log("POST successful.");  // Got a success code as response (201).
                         this.loadUsers();             // Reload the customer table.

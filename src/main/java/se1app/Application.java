@@ -55,29 +55,29 @@ public class Application {
     /**
      * Fill an empty database with some test data.
      */
-    public void insertTestData() {
-        NeighborhoodRepository.createNeighborhood("Altona2", 22769, "Hamburg", "Deutschland");
-        UserRepository.createUser("Sahin", "Tekes", "stekes@haw.de", "Strasse 5");
-        EventRepository.createEvent("Testevent", new Date(2020, 1, 1), new TimeType(15, 15, 15, 51), EventStatus.EVENT_PLANNED);
-        EventUseCase.setOrganizer(1, 1);
-        EventUseCase.setNeighborhood(1, 1);
-        UserRepository.getUserById(1).setNeighborhood(NeighborhoodRepository.getNeighborhoodById(1));
-
-        UserRepository.createUser("Frank", "Rosin", "tomatenundschalotten@weisswein.de", "Rosinstraße 5");
-        UserRepository.createUser("Homer", "Simpson", "hsimpson@sector7g.de", "Evergreen Terrace 742");
-        UserRepository.createUser("Gordon", "Shumway", "alf@melmac.de", "Melmac 20215487");
-
-        UserRepository.getUserById(2).setNeighborhood(NeighborhoodRepository.getNeighborhoodById(1));
-        UserRepository.getUserById(3).setNeighborhood(NeighborhoodRepository.getNeighborhoodById(1));
-        UserRepository.getUserById(4).setNeighborhood(NeighborhoodRepository.getNeighborhoodById(1));
-
-        List<User> users = new ArrayList<>();
-        users.add(UserRepository.getUserById(2));
-        users.add(UserRepository.getUserById(3));
-        users.add(UserRepository.getUserById(4));
-        EventUseCase.addParticipants(users, 1);
-
-    }
+//    public void insertTestData() {
+//        NeighborhoodRepository.createNeighborhood("Altona2", 22769, "Hamburg", "Deutschland");
+//        UserRepository.createUser("Sahin", "Tekes", "stekes@haw.de", "Strasse 5");
+//        EventRepository.createEvent("Testevent", new Date(2020, 1, 1), new TimeType(15, 15, 15, 51), EventStatus.EVENT_PLANNED);
+//        EventUseCase.setOrganizer(1, 1);
+//        EventUseCase.setNeighborhood(1, 1);
+//        UserRepository.getUserById(1).setNeighborhood(NeighborhoodRepository.getNeighborhoodById(1));
+//
+//        UserRepository.createUser("Frank", "Rosin", "tomatenundschalotten@weisswein.de", "Rosinstraße 5");
+//        UserRepository.createUser("Homer", "Simpson", "hsimpson@sector7g.de", "Evergreen Terrace 742");
+//        UserRepository.createUser("Gordon", "Shumway", "alf@melmac.de", "Melmac 20215487");
+//
+//        UserRepository.getUserById(2).setNeighborhood(NeighborhoodRepository.getNeighborhoodById(1));
+//        UserRepository.getUserById(3).setNeighborhood(NeighborhoodRepository.getNeighborhoodById(1));
+//        UserRepository.getUserById(4).setNeighborhood(NeighborhoodRepository.getNeighborhoodById(1));
+//
+//        List<User> users = new ArrayList<>();
+//        users.add(UserRepository.getUserById(2));
+//        users.add(UserRepository.getUserById(3));
+//        users.add(UserRepository.getUserById(4));
+//        EventUseCase.addParticipants(users, 1);
+//
+//    }
 
 
     // --------------------------------------------------------------------------
@@ -107,7 +107,7 @@ public class Application {
         // If this is an empty database, populate tables with test data.
         if (UserRepository.getAllUsers().size() == 0) {
             System.out.println("Empty database found! Filling it with test data!");
-            application.insertTestData();
+//            application.insertTestData();
         }
 
 //        // Print all customers to console.

@@ -114,7 +114,8 @@ public class H2Database {
   public void stop() {
     if (_session != null) {
       try { _session.close(); }
-      catch (HibernateException ex) { /* */ }
+      catch (HibernateException ex) {
+        System.out.println("heloooooooo"); /* */ }
     }
     if (_config.initInMemory) {
       try {

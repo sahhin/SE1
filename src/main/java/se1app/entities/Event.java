@@ -41,11 +41,11 @@ public class Event {
     @Column(name = "eventStatusId")
     private EventStatus _eventStatusId;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     public User _user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     @JoinColumn(name = "neighborhood_id")
     public Neighborhood _neighborhood;
 
