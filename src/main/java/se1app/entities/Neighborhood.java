@@ -33,10 +33,10 @@ public class Neighborhood {
     @Column(name = "neighborhoodCountry")
     private String _neighborhoodCountry;
 
-    @OneToMany(mappedBy = "_neighborhood", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "_neighborhood", cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     private List<User> _user;
 
-    @OneToMany(mappedBy = "_neighborhood", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "_neighborhood", cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
     private List<Event> _event;
 
 

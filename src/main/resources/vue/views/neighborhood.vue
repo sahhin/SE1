@@ -144,7 +144,7 @@
                     .then(response => {
                         this.neighborhoods = response.data;
                     }).catch(() => {
-                    alert("Error while fetching neighborhoods");
+                    this.$toastr.error('Error while fetching neighborhoods', 'GET /api/neighborhoods');
                 });
             },
 
@@ -156,15 +156,12 @@
                     console.log("DEL successful.");  // Got a success code as response (201).
                     this.loadNeighborhoods();             // Reload the customer table.
                 }, error => {
-                    console.error("DEL failed! Error:");  // Something failed.
-                    console.error(error);                  // Print error message on console.
+                    this.$toastr.error('DEL failed! Error: ' + error, 'DEL /api/neighborhoods');
                 });
             },
 
             /** Process the input form to create a new customer. */
             processForm: function (e) {
-
-
                 // Validate the user's input.
                 this.errors = [];
                 if (!this.newNeighborhood.neighborhoodName) this.errors.push('Stadtteil fehlt');
@@ -184,8 +181,7 @@
                         this.loadNeighborhoods();             // Reload the customer table.
                         this.newNeighborhood = {};            // Clear input fields.
                     }, error => {
-                        console.error("POST failed! Error:");  // Something failed.
-                        console.error(error);                  // Print error message on console.
+                        this.$toastr.error('POST failed! Error: ' + error, 'POST /api/neighborhoods');
                     });
                 }
                 e.preventDefault();

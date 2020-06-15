@@ -9,6 +9,7 @@ import se1app.datatypes.TimeType;
 import se1app.entities.Event;
 import se1app.entities.User;
 import se1app.exceptions.InvalidEmailException;
+import se1app.persistency.H2Database;
 import se1app.repositories.EventRepository;
 import se1app.repositories.NeighborhoodRepository;
 import se1app.repositories.UserRepository;
@@ -87,29 +88,26 @@ public class EventController {
         try {
             var jsonNode = new ObjectMapper().readTree(ctx.body());
             String[] times = jsonNode.get("eventTime").get("time").asText().split("-");
-            int startHours = Integer.parseInt(times[0].substring(0, times[0].indexOf(':')));
-            int startMins = Integer.parseInt(times[0].substring(times[0].indexOf(':') + 1).strip());
-            int endHours = Integer.parseInt(times[1].substring(0, times[1].indexOf(':')).strip());
-            int endMins = Integer.parseInt(times[1].substring(times[1].indexOf(':') + 1));
+
             var savedEvent = EventRepository.createEvent(
                     jsonNode.get("eventName").asText(),
                     new Date(),
                     new TimeType(
-                            startHours,
-                            startMins,
-                            endHours,
-                            endMins
+                            times[0].substring(0, times[0].indexOf(':')),
+                            times[0].substring(times[0].indexOf(':') + 1).strip(),
+                            times[1].substring(0, times[1].indexOf(':')).strip(),
+                            times[1].substring(times[1].indexOf(':') + 1)
                     ),
                     EventStatus.EVENT_PLANNED
-                    );
+            );
 
             savedEvent.setNeighborhood(NeighborhoodRepository.getNeighborhoodById(jsonNode.get("_neighborhood").asInt()));
             savedEvent.setOrganiser(UserRepository.getUserById(jsonNode.get("_user").asInt()));
 
-            String[] participants =  jsonNode.get("_eventUser").asText().split(",");
+            String[] participants = jsonNode.get("_eventUser").asText().split(",");
 //            System.out.println(jsonNode.get("_eventUser").asText());
             List<User> newParticipants = new ArrayList<User>();
-            for(int i = 0; i < participants.length; i++){
+            for (int i = 0; i < participants.length; i++) {
                 newParticipants.add(UserRepository.getUserById(Integer.parseInt(participants[i])));
             }
             savedEvent.addUsers(newParticipants);
@@ -117,6 +115,9 @@ public class EventController {
             if (savedEvent != null) ctx.res.setStatus(201); // 201 - Created (POST success)
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
         } catch (JsonProcessingException ex) {
+            var session = H2Database.getInstance().getSession();
+            var transaction = session.beginTransaction();
+            transaction.rollback();
             var msg = "JSON parser exception: " + ex;
             System.err.println("[EventController] createEvent: " + msg);
             ctx.res.sendError(400, msg);
@@ -142,12 +143,14 @@ public class EventController {
                 if (jsonNode.get("eventName") != null) {
                     event.setEventName(jsonNode.get("eventName").asText());
                 }
+//                "15:15 - 15:15"
                 if (jsonNode.get("eventTime") != null) {
+                    String[] eventTime = jsonNode.get("eventTime").asText().split("-");
                     event.setEventTime(new TimeType(
-                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(0, jsonNode.get("eventTime").asText().charAt(':'))),
-                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(jsonNode.get("eventTime").asText().charAt(':'), jsonNode.get("eventTime").asText().charAt(' '))),
-                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(jsonNode.get("eventTime").asText().charAt('-') + 1), jsonNode.get("eventTime").asText().charAt(':')),
-                            Integer.parseInt(jsonNode.get("eventTime").asText().substring(jsonNode.get("eventTime").asText().charAt(':')))));
+                            eventTime[0].substring(0, eventTime[0].indexOf(':')),
+                            eventTime[0].substring(eventTime[0].indexOf(':') + 1).strip(),
+                            eventTime[1].substring(0, eventTime[1].indexOf(':')).strip(),
+                            eventTime[1].substring(eventTime[1].indexOf(':') + 1)));
                 }
                 if (jsonNode.get("eventStatusId") != null) {
                     event.setEventStatusId(EventStatus.valueOf(jsonNode.get("eventStatusId").asText()));

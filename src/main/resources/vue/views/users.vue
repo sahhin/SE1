@@ -1,10 +1,12 @@
 <template id="users-tmpl" v-cloak>
-        <app-frame current-page="users">
+    <app-frame current-page="users">
         <div class="md-layout">
             <div class="md-layout-item md-size-75 md-medium-size-100 md-small-size-100 md-xsmall-size-100 nTable">
                 <md-card md-with-hover>
                     <md-card-header>
-                        <div class="md-title">User verwalten</div>
+                        <div class="md-title">
+                            <md-icon>person</md-icon>
+                            User verwalten</div>
                         <div class="md-subhead">User ansehen, verändern und löschen</div>
                     </md-card-header>
                     <md-table>
@@ -19,27 +21,28 @@
                         </md-table-row>
 
                         <tr v-for="user in this.users" v-bind:key="user.id">
-                        <md-table-row v-for="user in this.users" v-bind:key="user.id">
-                            <md-table-cell md-numeric>{{user.id}}</md-table-cell>
-                            <md-table-cell>{{user.firstName}}</md-table-cell>
-                            <md-table-cell>{{user.lastName}}</md-table-cell>
-                            <md-table-cell>{{user.emailAddress.email}}</md-table-cell>
+                            <md-table-row v-for="user in this.users" v-bind:key="user.id">
+                                <md-table-cell md-numeric>{{user.id}}</md-table-cell>
+                                <md-table-cell>{{user.firstName}}</md-table-cell>
+                                <md-table-cell>{{user.lastName}}</md-table-cell>
+                                <md-table-cell>{{user.emailAddress.email}}</md-table-cell>
 
-                            <md-table-cell>
-                                {{user.custAdress.adress}}
-                            </md-table-cell>
+                                <md-table-cell>
+                                    {{user.custAdress.adress}}
+                                </md-table-cell>
 
-                            <md-table-cell v-if="user._neighborhood != null">
-                                {{user._neighborhood.neighborhoodCity}}, {{user._neighborhood.neighborhoodName}}
-                            </md-table-cell>
+                                <md-table-cell v-if="user._neighborhood != null">
+                                    {{user._neighborhood.neighborhoodCity}}, {{user._neighborhood.neighborhoodName}}
+                                </md-table-cell>
 
-                            <md-table-cell>
+                                <md-table-cell>
 
-                                <md-button class="md-icon-button md-raised md-accent" @click="confirmDelete(user.id)">
-                                    <md-icon>delete</md-icon>
-                                </md-button>
-                            </md-table-cell>
-                        </md-table-row>
+                                    <md-button class="md-icon-button md-raised md-accent"
+                                               @click="confirmDelete(user.id)">
+                                        <md-icon>delete</md-icon>
+                                    </md-button>
+                                </md-table-cell>
+                            </md-table-row>
                     </md-table>
                 </md-card>
                 <md-dialog-confirm
@@ -48,13 +51,15 @@
                         md-content="Der ausgewählte User wird gelöscht und kann nicht wiederhergestellt werden!"
                         md-confirm-text="Löschen"
                         md-cancel-text="Abbrechen"
-                        @md-confirm="onConfirm" />
+                        @md-confirm="onConfirm"/>
             </div>
             <div class="md-layout-item md-size-25 md-medium-size-100 md-small-size-100 md-xsmall-size-100">
                 <form id="formCreateCustomer" @submit="processForm">
                     <md-card md-with-hover>
                         <md-card-header>
-                            <div class="md-title">User anlegen</div>
+                            <div class="md-title">
+                                <md-icon>person_add</md-icon>
+                                User anlegen</div>
                         </md-card-header>
 
                         <md-card-content>
@@ -82,7 +87,8 @@
                                 <label for="neighborhoods">Nachbarschaft</label>
                                 <md-select name="neighborhoods" id="neighborhoods"
                                            v-model="neighborhoods.neighborhoodId">
-                                    <md-option v-for="neighborhood in neighborhoods" :value="neighborhood.neighborhoodId">
+                                    <md-option v-for="neighborhood in neighborhoods"
+                                               :value="neighborhood.neighborhoodId">
                                         {{neighborhood.neighborhoodName}}
                                     </md-option>
                                 </md-select>
@@ -149,15 +155,15 @@
         },
 
         methods: {
-            confirmDelete(userId){
+            confirmDelete(userId) {
                 this.active = true;
                 this.elementToDelete = userId;
             },
-            onConfirm () {
+            onConfirm() {
                 this.removeUser(this.elementToDelete);
                 this.elementToDelete = null;
             },
-            onCancel () {
+            onCancel() {
                 this.elementToDelete = null;
             },
 
@@ -189,8 +195,12 @@
                 if (!this.newCustomer.firstName) this.errors.push('Vorname fehlt');
                 if (!this.newCustomer.lastName) this.errors.push('Nachname fehlt');
                 if (!this.newCustomer.email) this.errors.push('E-Mail Adresse fehlt');
+                if (!this.newCustomer.adress) this.errors.push('Adresse fehlt');
+                if (!this.neighborhoods.neighborhoodId) this.errors.push('Nachbarschaft fehlt');
                 else if (!this.validEmail(this.newCustomer.email)) {
                     this.errors.push('E-Mail Adresse ist ungültig');
+                } else if (!this.validAdress(this.newCustomer.adress)) {
+                    this.errors.push('Adresse ist ungültig, prüfen Sie Hausnummer');
                 }
 
                 // Input validation successful! Send POST request to the backend.
@@ -205,23 +215,23 @@
                         console.log("POST successful.");  // Got a success code as response (201).
                         this.loadUsers();             // Reload the customer table.
                         this.newCustomer = {};            // Clear input fields.
+                        this.neighborhoods = [];
+                        this.loadNeighborhoods();
                     }, error => {
-                        console.error("POST failed! Error:");  // Something failed.
-                        console.error(error);                  // Print error message on console.
+                        this.$toastr.error('POST failed! Error: '+error, 'POST /api/users');
                     });
                 }
                 e.preventDefault();
             },
 
-            removeUser: function (userId){
+            removeUser: function (userId) {
                 console.log(userId);
                 axios.delete("/api/users/" + userId
                 ).then(response => {
                     console.log("DEL successful.");  // Got a success code as response (201).
                     this.loadUsers();             // Reload the customer table.
                 }, error => {
-                    console.error("DEL failed! Error:");  // Something failed.
-                    console.error(error);                  // Print error message on console.
+                    this.$toastr.error('DEL failed! Error: '+error, 'DEL /api/users');
                 });
             },
 
@@ -231,6 +241,10 @@
             validEmail: function (email) {
                 var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 return re.test(email);
+            },
+            validAdress: function (adress) {
+                var re = /[a-zA-Z]+[a-zA-Z]?(\\.)? [0-9]/;
+                return re.test(adress);
             }
         }
     });
@@ -242,9 +256,10 @@
         background-color: lightgrey;
     }
 
-    .addNeighborhood{
+    .addNeighborhood {
         font-size: 150%;
     }
+
     #formCreateCustomer label {
         float: left;
         min-width: 100px;

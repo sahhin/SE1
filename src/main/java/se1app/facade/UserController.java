@@ -11,6 +11,7 @@ import se1app.datatypes.TimeType;
 import se1app.entities.Event;
 import se1app.entities.Neighborhood;
 import se1app.exceptions.InvalidEmailException;
+import se1app.persistency.H2Database;
 import se1app.repositories.NeighborhoodRepository;
 import se1app.repositories.UserRepository;
 import se1app.entities.User;
@@ -97,6 +98,9 @@ public class UserController {
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
         } catch (JsonProcessingException ex) {
             var msg = "JSON parser exception: " + ex;
+            var session = H2Database.getInstance().getSession();
+            var transaction = session.beginTransaction();
+            transaction.rollback();
             System.err.println("[UserController] createUser: " + msg);
             ctx.res.sendError(400, msg);
         }

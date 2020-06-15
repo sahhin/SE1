@@ -109,7 +109,7 @@
                             <label for="participants">Teilnehmer</label>
                             <md-select name="participants" id="participants"
                                        v-model="participants.id" multiple>
-                                <md-option v-for="participant in users" :value="participant.id">
+                                <md-option v-for="participant in users" v-if="participant.id !== users.id" :value="participant.id">
                                     #{{participant.id}} {{participant.firstName}} {{participant.lastName}}
                                 </md-option>
                             </md-select>
@@ -149,7 +149,6 @@
     Vue.component("events-comp", {
         template: "#events-tmpl",
         components: {
-            vuejsDatepicker,
             VueToastr2
         },
         data: () => ({
@@ -230,28 +229,37 @@
 
             /** Process the input form to create a new customer. */
             processForm: function (e) {
+                let newParticipants = this.participants.id.toString();
+
                 // Validate the user's input.
                 this.errors = [];
                 if (!this.newEvent.eventName) this.errors.push('Titel fehlt');
                 if (!this.newEvent.eStartTime) this.errors.push('Startuhrzeit fehlt');
                 if (!this.newEvent.eEndTime) this.errors.push('Enduhrzeit fehlt');
+                if (!this.neighborhoods.neighborhoodId) this.errors.push('Nachbarschaft fehlt');
+                if (!this.users.id) this.errors.push('Organisator fehlt');
+                if (!newParticipants) this.errors.push('Teilnehmer fehlen');
 
                 // Input validation successful! Send POST request to the backend.
                 if (this.errors.length === 0) {
-                    const parts = this.participants.id.toString();
                     axios.post("/api/events", {
                         eventName: this.newEvent.eventName,
                         eventTime: {time: this.newEvent.eStartTime + " - " + this.newEvent.eEndTime},
                         _neighborhood: this.neighborhoods.neighborhoodId,
                         _user: this.users.id,
-                        _eventUser: parts
+                        _eventUser: newParticipants
                     }).then(response => {
                         this.$toastr.success('POST successful', 'POST /api/events', this.toastrOptions);
                         this.loadEvents();             // Reload the customer table.
                         this.newEvent = {};            // Clear input fields.
+                        this.neighborhoods= [];
+                        this.users = [];
+                        this.loadNeighborhoods();
+                        this.loadUsers();
+                        newParticipants = []
+                        this.participants=[]
                     }, error => {
-                        console.error("POST failed! Error:");  // Something failed.
-                        console.error(error);                  // Print error message on console.
+                        this.$toastr.error('POST failed! Error: '+error, 'POST /api/events');
                     });
                 }
                 e.preventDefault();

@@ -7,6 +7,7 @@ import io.javalin.http.Context;
 import se1app.entities.Neighborhood;
 import se1app.entities.User;
 import se1app.exceptions.InvalidEmailException;
+import se1app.persistency.H2Database;
 import se1app.repositories.NeighborhoodRepository;
 
 import java.io.IOException;
@@ -87,6 +88,9 @@ public class NeighborhoodController {
             else ctx.res.setStatus(500);                       // 500 - Internal Server Error
         } catch (JsonProcessingException ex) {
             var msg = "JSON parser exception: " + ex;
+            var session = H2Database.getInstance().getSession();
+            var transaction = session.beginTransaction();
+            transaction.rollback();
             System.err.println("[NeighborhoodController] createNeighborhood: " + msg);
             ctx.res.sendError(400, msg);
         }
@@ -122,7 +126,7 @@ public class NeighborhoodController {
                 ctx.res.sendError(400, ex.toString());
             }
         }
-        
+
     }
 
 
