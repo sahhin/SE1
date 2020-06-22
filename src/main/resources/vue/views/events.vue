@@ -174,7 +174,7 @@
 
         created() {
             this.loadEvents();
-            this.loadUsersNeighborhoods();
+            // this.loadUsersNeighborhoods();
            // this.loadNeighborhoods();
            // this.loadUsers();
             document.title = "Events - " + document.title;
@@ -243,7 +243,10 @@
             loadEvents: function () {
                 axios.get("/api/events")
                     .then(response => {
-                        this.events = response.data;
+                        this.events = response.data[0];
+                        this.users = response.data[1];
+                        this.neighborhoods = response.data[2];
+
                         // this.$toastr.success('Success while fetching events', 'GET /api/events', this.toastrOptions);
                     }).catch(() => {
                     this.$toastr.error('Error while fetching events', 'GET /api/events', this.toastrOptions);

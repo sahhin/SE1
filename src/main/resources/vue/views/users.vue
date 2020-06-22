@@ -150,7 +150,7 @@
 
         created() {
             this.loadUsers();
-            this.loadNeighborhoods();
+            // this.loadNeighborhoods();
             document.title = "Users - " + document.title;
         },
 
@@ -171,7 +171,8 @@
             loadUsers: function () {
                 axios.get("/api/users")
                     .then(response => {
-                        this.users = response.data;
+                        this.users = response.data[0];
+                        this.neighborhoods = response.data[1];
                     }).catch(() => {
                     alert("Error while fetching users");
                 });

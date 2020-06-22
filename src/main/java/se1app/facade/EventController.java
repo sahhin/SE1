@@ -50,7 +50,13 @@ public class EventController {
      */
     private static void getAllEvents(Context ctx) {
         var eventList = EventRepository.getAllEvents();
-        ctx.json(eventList);
+        var userList = UserRepository.getAllUsers();
+        var neighborhoodList = NeighborhoodRepository.getAllNeighborhoods();
+        List<Object> sections = new ArrayList<Object>();
+        sections.add(eventList);
+        sections.add(userList);
+        sections.add(neighborhoodList);
+        ctx.json(sections);
     }
 
 
