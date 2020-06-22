@@ -42,7 +42,8 @@
                             </md-table-cell>
                             <md-table-cell>
 
-                                <md-button class="md-icon-button md-raised md-accent" @click="confirmDelete(event.eventId)">
+                                <md-button class="md-icon-button md-raised md-accent"
+                                           @click="confirmDelete(event.eventId)">
                                     <md-icon>delete</md-icon>
                                 </md-button>
                             </md-table-cell>
@@ -55,88 +56,90 @@
                         md-content="Das ausgewählte Event wird gelöscht und kann nicht wiederhergestellt werden!"
                         md-confirm-text="Löschen"
                         md-cancel-text="Abbrechen"
-                        @md-confirm="onConfirm" />
+                        @md-confirm="onConfirm"/>
             </div>
             <div class="md-layout-item md-size-25 md-medium-size-100 md-small-size-100 md-xsmall-size-100">
                 <form id="formCreateEvent" @submit="processForm">
-                <md-card md-with-hover>
-                    <md-card-header>
-                        <div class="md-title">Event anlegen</div>
-                    </md-card-header>
-
-                    <md-card-content>
-                        <md-field md-clearable>
-                            <label for="eEventName">Titel:</label>
-                            <md-input id="eEventName" v-model="newEvent.eventName" type="text"></md-input>
-                            <span class="md-error">There is an error</span>
-                        </md-field>
-
-                        <md-field md-clearable>
-                            <label for="eStartTime">Startzeit:</label>
-                            <md-input style="text-align: right;" type="time" id="eStartTime"
-                                      v-model="newEvent.eStartTime"
-                                      min="00:00" max="23:59"></md-input>
-                        </md-field>
-
-                        <md-field md-clearable>
-                            <label for="eStartTime">Endzeit:</label>
-                            <md-input style="text-align: right;" type="time" id="eEndTime"
-                                      v-model="newEvent.eEndTime"
-                                      min="00:00" max="23:59"></md-input>
-                        </md-field>
-
-                        <md-field>
-                            <label for="neighborhoods">Nachbarschaft</label>
-                            <md-select name="neighborhoods" id="neighborhoods"
-                                       v-model="neighborhoods.neighborhoodId">
-                                <md-option v-for="neighborhood in neighborhoods" :value="neighborhood.neighborhoodId">
-                                    {{neighborhood.neighborhoodName}}
-                                </md-option>
-                            </md-select>
-                        </md-field>
-
-                        <md-field>
-                            <label for="users">Organisator</label>
-                            <md-select name="users" id="users"
-                                       v-model="users.id">
-                                <md-option v-for="user in users" :value="user.id">
-                                    #{{user.id}} {{user.lastName}}, {{user.firstName}}
-                                </md-option>
-                            </md-select>
-                        </md-field>
-
-                        <md-field>
-                            <label for="participants">Teilnehmer</label>
-                            <md-select name="participants" id="participants"
-                                       v-model="participants.id" multiple>
-                                <md-option v-for="participant in users" v-if="participant.id !== users.id" :value="participant.id">
-                                    #{{participant.id}} {{participant.firstName}} {{participant.lastName}}
-                                </md-option>
-                            </md-select>
-                        </md-field>
-
-                    </md-card-content>
-
-                    <md-card-actions>
-                        <md-button class="md-raised md-primary" type="submit">
-                            Speichern
-                            <md-icon>save</md-icon>
-                        </md-button>
-                        <md-button class="md-raised md-accent" type="reset" v-on:click="errors = []">
-                            Felder leeren
-                            <md-icon>delete</md-icon>
-                        </md-button>
-                    </md-card-actions>
-
-                    <md-card id="cardFormError" v-if="errors.length">
+                    <md-card md-with-hover>
                         <md-card-header>
-                            <div class="md-title">Bitte korrigiere die folgenden Fehler:</div>
+                            <div class="md-title">Event anlegen</div>
                         </md-card-header>
-                        <div style="padding: 16px">
-                            <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
-                        </div>
+
+                        <md-card-content>
+                            <md-field md-clearable>
+                                <label for="eEventName">Titel:</label>
+                                <md-input id="eEventName" v-model="newEvent.eventName" type="text"></md-input>
+                                <span class="md-error">There is an error</span>
+                            </md-field>
+
+                            <md-field md-clearable>
+                                <label for="eStartTime">Startzeit:</label>
+                                <md-input style="text-align: right;" type="time" id="eStartTime"
+                                          v-model="newEvent.eStartTime"
+                                          min="00:00" max="23:59"></md-input>
+                            </md-field>
+
+                            <md-field md-clearable>
+                                <label for="eStartTime">Endzeit:</label>
+                                <md-input style="text-align: right;" type="time" id="eEndTime"
+                                          v-model="newEvent.eEndTime"
+                                          min="00:00" max="23:59"></md-input>
+                            </md-field>
+
+                            <md-field>
+                                <label for="neighborhoods">Nachbarschaft</label>
+                                <md-select name="neighborhoods" id="neighborhoods"
+                                           v-model="neighborhoods.neighborhoodId">
+                                    <md-option v-for="neighborhood in neighborhoods"
+                                               :value="neighborhood.neighborhoodId">
+                                        {{neighborhood.neighborhoodName}}
+                                    </md-option>
+                                </md-select>
+                            </md-field>
+
+                            <md-field>
+                                <label for="users">Organisator</label>
+                                <md-select name="users" id="users"
+                                           v-model="users.id">
+                                    <md-option v-for="user in users" :value="user.id">
+                                        #{{user.id}} {{user.lastName}}, {{user.firstName}}
+                                    </md-option>
+                                </md-select>
+                            </md-field>
+
+                            <md-field>
+                                <label for="participants">Teilnehmer</label>
+                                <md-select name="participants" id="participants"
+                                           v-model="participants.id" multiple>
+                                    <md-option v-for="participant in users" v-if="participant.id !== users.id"
+                                               :value="participant.id">
+                                        #{{participant.id}} {{participant.firstName}} {{participant.lastName}}
+                                    </md-option>
+                                </md-select>
+                            </md-field>
+
+                        </md-card-content>
+
+                        <md-card-actions>
+                            <md-button class="md-raised md-primary" type="submit">
+                                Speichern
+                                <md-icon>save</md-icon>
+                            </md-button>
+                            <md-button class="md-raised md-accent" type="reset" v-on:click="errors = []">
+                                Felder leeren
+                                <md-icon>delete</md-icon>
+                            </md-button>
+                        </md-card-actions>
+
+                        <md-card id="cardFormError" v-if="errors.length">
+                            <md-card-header>
+                                <div class="md-title">Bitte korrigiere die folgenden Fehler:</div>
+                            </md-card-header>
+                            <div style="padding: 16px">
+                                <p v-for="error in errors" v-bind:key="error">{{ error }}</p>
+                            </div>
+                        </md-card>
                     </md-card>
-                </md-card>
                 </form>
             </div>
         </div>
@@ -171,22 +174,36 @@
 
         created() {
             this.loadEvents();
-            this.loadNeighborhoods();
-            this.loadUsers();
+            this.loadUsersNeighborhoods();
+           // this.loadNeighborhoods();
+           // this.loadUsers();
             document.title = "Events - " + document.title;
         },
 
+
         methods: {
-            confirmDelete(eventId){
+            confirmDelete(eventId) {
                 this.active = true;
                 this.elementToDelete = eventId;
             },
-            onConfirm () {
+            onConfirm() {
                 this.removeEvent(this.elementToDelete);
                 this.elementToDelete = null;
             },
-            onCancel () {
+            onCancel() {
                 this.elementToDelete = null;
+            },
+            loadUsersNeighborhoods: function () {
+                axios.get("/api/neighborhoods")
+                    .then(response => {
+                        this.neighborhoods = response.data;
+                        this.loadUsers();
+
+                        // this.$toastr.success('Success while fetching neighborhoods', 'GET /api/neighborhoods');
+                    }).catch(() => {
+                    this.$toastr.error('Error while fetching neighborhoods', 'GET /api/neighborhoods');
+                    // this.loadNeighborhoods();
+                });
             },
 
             /** Load all neighborhoods from the REST endpoint. */
@@ -194,6 +211,14 @@
                 axios.get("/api/neighborhoods")
                     .then(response => {
                         this.neighborhoods = response.data;
+                        axios.get("/api/users")
+                            .then(response => {
+                                this.users = response.data;
+                                // this.$toastr.success('Success while fetching users', 'GET /api/users');
+                            }).catch(() => {
+                            this.$toastr.error('Error while fetching users', 'GET /api/users');
+                            // this.loadUsers();
+                        });
                         // this.$toastr.success('Success while fetching neighborhoods', 'GET /api/neighborhoods');
                     }).catch(() => {
                     this.$toastr.error('Error while fetching neighborhoods', 'GET /api/neighborhoods');
@@ -252,14 +277,14 @@
                         this.$toastr.success('POST successful', 'POST /api/events', this.toastrOptions);
                         this.loadEvents();             // Reload the customer table.
                         this.newEvent = {};            // Clear input fields.
-                        this.neighborhoods= [];
+                        this.neighborhoods = [];
                         this.users = [];
                         this.loadNeighborhoods();
                         this.loadUsers();
                         newParticipants = []
-                        this.participants=[]
+                        this.participants = []
                     }, error => {
-                        this.$toastr.error('POST failed! Error: '+error, 'POST /api/events');
+                        this.$toastr.error('POST failed! Error: ' + error, 'POST /api/events');
                     });
                 }
                 e.preventDefault();
