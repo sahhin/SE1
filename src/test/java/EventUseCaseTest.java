@@ -30,9 +30,9 @@ public class EventUseCaseTest {
       }});
       _db = H2Database.getInstance();
       UserRepository.createUser("Maria", "Testmann", "test@test.de", "Teststraße 5");
-      EventRepository.createEvent("Gemeinsam Lernen", new Date(11,11,4), new TimeType(15,20,17,30), EventStatus.EVENT_PLANNED);
-      EventRepository.createEvent("Geburtstag Jeny", new Date(11,11,4), new TimeType(15,20,17,30), EventStatus.EVENT_PLANNED);
-      EventRepository.createEvent("Grillen", new Date(11,11,4), new TimeType(15,20,17,30), EventStatus.EVENT_PLANNED);
+      EventRepository.createEvent("Gemeinsam Lernen", new Date(11,11,4), new TimeType("15","20","17","30"), EventStatus.EVENT_PLANNED);
+      EventRepository.createEvent("Geburtstag Jeny", new Date(11,11,4), new TimeType("15","20","17","30"), EventStatus.EVENT_PLANNED);
+      EventRepository.createEvent("Grillen", new Date(11,11,4), new TimeType("15","20","17","30"), EventStatus.EVENT_PLANNED);
     }
 
 

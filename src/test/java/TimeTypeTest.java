@@ -18,7 +18,7 @@ public class TimeTypeTest {
     } )
     public void createTimeFromStringSuccess(String time) {
         String[] timearr = time.split(",");
-        new TimeType(Integer.parseInt(timearr[0]),Integer.parseInt(timearr[1]),Integer.parseInt(timearr[2]),Integer.parseInt(timearr[3]));
+        new TimeType(timearr[0],timearr[1],timearr[2],timearr[3]);
     }
 
 
@@ -33,7 +33,7 @@ public class TimeTypeTest {
         String[] timearr = time.split(",");
         Assertions.assertThrows(
                 InvalidTimeException.class,
-                () ->  new TimeType(Integer.parseInt(timearr[0]),Integer.parseInt(timearr[1]),Integer.parseInt(timearr[2]),Integer.parseInt(timearr[3])),
+                () ->  new TimeType(timearr[0],timearr[1],timearr[2],timearr[3]),
                 "'" + Integer.parseInt(timearr[0]) + ":"+Integer.parseInt(timearr[1]) +"- "+ Integer.parseInt(timearr[2]) +":" +Integer.parseInt(timearr[3]) + "' is no valid time!"
         );
     }

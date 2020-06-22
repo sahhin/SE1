@@ -43,9 +43,9 @@ public class EventRepositoryTest {
   /** Create three entries. */
   private static void createTestEvents() {
 
-    EventRepository.createEvent("SE 1", new Date(11,11,4), new TimeType(15,25,17,30), EventStatus.EVENT_PLANNED);
-    EventRepository.createEvent("AD", new Date(11,11,4), new TimeType(15,30,17,30), EventStatus.EVENT_PLANNED);
-    EventRepository.createEvent("BWL II", new Date(11,11,4), new TimeType(15,30,17,30), EventStatus.EVENT_PLANNED);
+    EventRepository.createEvent("SE 1", new Date(11,11,4), new TimeType("15","25","17","30"), EventStatus.EVENT_PLANNED);
+    EventRepository.createEvent("AD", new Date(11,11,4), new TimeType("15","30","17","30"), EventStatus.EVENT_PLANNED);
+    EventRepository.createEvent("BWL II", new Date(11,11,4), new TimeType("15","30","17","30"), EventStatus.EVENT_PLANNED);
 
   }
 
